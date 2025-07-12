@@ -1,5 +1,9 @@
+import { useState } from "react";
+
 function SignUpPage(){
-    return <div>This is the sign up page</div>
+    return <>
+    <button>Sign up</button>
+    </>
 }
 
 

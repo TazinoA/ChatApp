@@ -28,7 +28,7 @@ async function login(req, res){
 const{email, password} = req.body;
 const result = await pool.query(`SELECT * FROM users WHERE email = '${email}'`);
 
-if(result.rows.length >= 0){
+if(result.rows.length > 0){
     const password_hash = result.rows[0].password_hash;
     const isMatch = await bcrypt.compare(password, password_hash);
 

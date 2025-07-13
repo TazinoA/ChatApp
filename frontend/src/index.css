@@ -1,0 +1,150 @@
+:root {
+  /* Primary Colors */
+  --primary: #3b82f6;
+  --primary-foreground: #fafafa;
+  
+  /* Background Colors */
+  --background: #ffffff;
+  --foreground: #0f172a;
+  background-color: var(--slate-100);
+  
+  /* Slate Scale */
+  --slate-100: #f1f5f9;
+  --slate-200: #e2e8f0;
+  --slate-700: #334155;
+  --slate-800: #1e293b;
+  --slate-900: #0f172a;
+  
+  /* Borders */
+  --border: #e2e8f0;
+  
+  /* Text */
+  --muted-foreground: #64748b;
+}
+
+body{
+    margin:0;
+    padding: 0;
+}
+
+*{
+    box-sizing: border-box;
+}
+
+
+.sign-up-container{
+    width:100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sign-up-board{
+    background-color: var(--primary-foreground);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 3px solid black;
+    width:30%;
+    height: 70%;   
+    border-radius: 0.5rem;
+}
+
+
+.sign-up-board > img{
+    width: 3rem;
+    height:3rem;
+    border-radius: 50%;
+    margin-top:1.5rem;
+    margin-bottom:1rem;
+}
+
+.sign-up-board > h3{
+    margin:0;
+}
+
+.description{
+    margin-top:0;
+    margin-bottom: 2rem;
+}
+
+label{
+    align-self: flex-start;
+    margin-left: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+input{
+    width: 90%;
+    border-radius: 0.2rem;
+    height: 2.5rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid var(--border);
+    padding-left: 0.5rem;
+}
+
+.sign-up-btn{
+    margin-top:0.75rem;
+    width:90%;
+    background-color: #18181B;
+    color:white;
+    border-radius: 0.5rem;
+    height:4rem;
+}
+
+.continue-with{
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    width: 90%;
+    gap: 0.5rem;
+    color:#71717A;;
+    font-size: small;
+}
+
+span{
+    display:inline-block;
+    background-color:#71717A;
+    height:1px;
+    flex:1;
+}
+
+.alt-sign-in{
+    display:flex;
+    gap: 0.5rem;
+    width: 90%;
+    justify-content: center;
+    align-items: center;
+}
+
+.alt-sign-in > button{
+    width: 50%;
+    height: 2rem;
+    border: 1px solid var(--border);
+    background-color: var(--primary-foreground);
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem
+}
+
+
+
+.github>img{
+    width:1rem;
+    height:1rem;
+}
+
+.google>img{
+    width:1rem;
+    height:1rem;
+}
+
+.has-account{
+   color:#71717A;
+}
+
+a{
+    color:#18181B;
+}

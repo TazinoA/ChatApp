@@ -1,11 +1,12 @@
-import axios from "axios";
+import {api} from "./utils.js"
 
-axios.post("http://localhost:3000/api/message", {
- sender_id: 1,
- receiver_id:2,
- content:"hello"
+api.post("/api/message", {
+ sender_id: 3,
+ receiver_id:4,
+ content:"message"
 }).then(response =>{
   console.log(response.data);
 }).catch(err => {
-  console.log(err.response.data);
+  console.log(err);
 })
+

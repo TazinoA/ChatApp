@@ -13,13 +13,13 @@ import AuthContext from "./utils/AuthContext.js";
 function App(){
      const [loggedIn, setLoggedIn] = useState(false);
   return <>
-        <ul>
+        {/* <ul>
         <li> <Link to = "/settings">Settings</Link></li>
         <li><Link to = "/login">Login</Link></li>
         <li><Link to = "/">Home</Link></li>
         <li><Link to = "/profile">Profile</Link></li>
         <li><Link to = "/chat">chat</Link></li>
-        </ul>
+        </ul> */}
 
         <AuthContext.Provider value = {{loggedIn, setLoggedIn}}>
             <Routes>

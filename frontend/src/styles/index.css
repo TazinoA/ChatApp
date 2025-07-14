@@ -20,11 +20,22 @@
   
   /* Text */
   --muted-foreground: #64748b;
+
+    font-family: 'Inter', sans-serif;
 }
 
 body{
     margin:0;
     padding: 0;
+    overflow-x: hidden;
+    height: 100vh;
+    overflow-y: hidden;
+}
+
+#root {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 *{
@@ -45,9 +56,9 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 3px solid black;
+    border: 1px solid var(--border);
     width:30%;
-    height: 70%;   
+    height: 80%;   
     border-radius: 0.5rem;
 }
 
@@ -67,6 +78,7 @@ body{
 .description{
     margin-top:0;
     margin-bottom: 2rem;
+    color:#71717A;
 }
 
 label{
@@ -78,11 +90,13 @@ label{
 input{
     width: 90%;
     border-radius: 0.2rem;
-    height: 2.5rem;
+    height: 2rem;
     margin-bottom: 0.5rem;
     border: 1px solid var(--border);
     padding-left: 0.5rem;
 }
+
+
 
 .sign-up-btn{
     margin-top:0.75rem;
@@ -90,7 +104,7 @@ input{
     background-color: #18181B;
     color:white;
     border-radius: 0.5rem;
-    height:4rem;
+    height:2.75rem;
 }
 
 .continue-with{
@@ -103,7 +117,7 @@ input{
     font-size: small;
 }
 
-span{
+.continue-with>span{
     display:inline-block;
     background-color:#71717A;
     height:1px;
@@ -129,8 +143,6 @@ span{
     gap: 0.2rem
 }
 
-
-
 .github>img{
     width:1rem;
     height:1rem;
@@ -143,8 +155,87 @@ span{
 
 .has-account{
    color:#71717A;
+   margin-top:2rem;
+}
+
+.has-account > a:hover{
+    text-decoration: underline;
+    text-decoration-thickness:1px ;
 }
 
 a{
     color:#18181B;
+}
+
+header{
+    display:flex;
+    border: 1px solid #e2e8f0;
+    align-items: center;
+    background-color: #ffffff;
+    margin:0;
+    position:sticky;
+    top:0;
+    height: 4rem;
+}
+
+header img{
+    width: 1rem;
+    height:1rem;
+    display: flex;
+    align-items: center;
+}
+
+.header-left-section{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    width:20%;
+    justify-content: flex-start;
+    gap: 0.3rem;
+    margin-left: 1rem;
+}
+
+.header-left-section>img{
+    width: 1.5rem;
+    height:1.5rem;
+}
+
+.header-right-section{
+    display:flex;
+    margin-left:auto;
+    align-items: center;
+    justify-content: space-evenly;
+    width: 20%;
+    font-size: small;
+}
+
+.nav-link{
+    display:flex;
+    gap:0.2rem;
+    align-items: center;
+    text-decoration: none;
+}
+
+.nav-link:hover{
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 116, 139, 0.5);
+  border-radius: 10px;
+}
+
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(100, 116, 139, 0.5) transparent;
 }

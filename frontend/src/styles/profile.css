@@ -1,0 +1,80 @@
+.profile-container{
+    height:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-board{
+    border: 1px solid #e2e8f0;
+    display:flex;
+    flex-direction: column;
+    width: 40%;
+    height: 90%;
+    align-items: center;
+    border-radius: 0.5rem;
+    background-color: #ffffff;
+}
+
+.profile-board>h3{
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.profile-board >p{
+    margin-top: 0;
+}
+
+.profile-img{
+    height:6rem;
+    width:6rem;
+    margin-bottom: 1rem;
+}
+
+.label{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap:0.5rem;
+    align-self: flex-start;
+    margin-left: 2rem;
+}
+
+.label>*{
+    margin:0;
+}
+
+.label>img{
+    height:1rem;
+    width: 1rem;
+}
+
+.profile-board>input{
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+    border:2px solid #e2e8f0;
+}
+
+.account-info{
+    border:2px solid #e2e8f0;
+    width:90%;
+    border-radius: 0.5rem;
+    margin-top: 1.5rem;
+}
+
+.account-info > h4{
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    margin-left: 1rem;
+}
+
+.account-info > p{
+    display: flex;
+    margin-left: 1rem;
+}
+
+.account-info > p > span{
+    margin-left: auto;
+    margin-right: 1rem;
+}
+

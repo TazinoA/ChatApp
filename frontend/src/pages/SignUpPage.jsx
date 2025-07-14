@@ -9,15 +9,17 @@ function SignUpPage(){
     return <>
     <div className = "sign-up-container">
         <div className = "sign-up-board">
-       <img src = "https://picsum.photos/200/300"/>
+       <img src = "https://cdn-icons-png.flaticon.com/128/8794/8794966.png"/>
         <h3>Welcome to ChatApp</h3>
         <p className = "description">Sign up or log in to your account to continue</p>
-        <label for = "name">Name</label>
+        <label htmlFor = "name">Full Name</label>
         <input type = "text"  name = "name"></input>
-        <label for = "email">Email</label>
+        <label htmlFor = "email">Email</label>
         <input type = "email" placeholder="name@example.com" name = "email"></input>
-        <label for = "password">Password</label>
+         <label htmlFor = "password">Password</label>
         <input type="password" name = "password"></input>
+        <label htmlFor = "confirm">Confirm Password</label>
+        <input type = "password" pname = "confirm"></input>
          <button onClick = {() => { setLoggedIn(signUp(user)) }} className = "sign-up-btn">Sign Up</button>
         <div className="continue-with">
             <span></span>
@@ -28,7 +30,7 @@ function SignUpPage(){
             <button className="github"> <img src = "https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png"/> Github</button>
             <button className="google"> <img src = "https://www.gstatic.com/marketing-cms/assets/images/ef/8c/be724dfe44f88ea9f229c060dd0d/chrome-dino.webp=n-w96-h103-fcrop64=1,00000980fffff700-rw"/>  Google</button>
         </div>
-        <p className="has-account">Already have an account? <a>Sign in</a></p>
+        <p className="has-account">Already have an account? <a href = "/login">Sign in</a></p>
     </div>
     </div>
     </>

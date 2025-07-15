@@ -14,7 +14,9 @@ export default function SideBar(){
             <img src= "https://cdn-icons-png.flaticon.com/128/1159/1159633.png"/>
             </div>
         </header>
+       <div className="contacts">
         {contacts.map(contact => createContact(contact))}
+       </div>
         </div>
       </div>
     </>

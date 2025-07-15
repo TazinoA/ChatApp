@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { signUp } from "../utils/auth_handler";
 import AuthContext from "../utils/AuthContext";
+import "../styles/signup.css"
 
 function SignUpPage(){
     const {setLoggedIn} = useContext(AuthContext);

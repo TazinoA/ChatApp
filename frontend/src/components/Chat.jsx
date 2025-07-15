@@ -1,3 +1,5 @@
+import {createMessage} from "./Message.jsx";
+import messages from "../utils/messages.js";
 export default function Chat(props){
     return <>
         <div className="chat-container">
@@ -14,9 +16,11 @@ export default function Chat(props){
                 <button className="chat-settings"><img src = "https://cdn-icons-png.flaticon.com/128/1828/1828805.png"/></button>
             </div>
         </header>
-        <div className="message-container"></div>
+        <div className="message-container">
+            {messages.map(msg => createMessage(msg))}
+        </div>
         <footer>
-            <input type = "text"></input>
+            <input type = "text" placeholder="Type a message..."></input>
             <button>Photo</button>
             <button>Send</button>
         </footer>

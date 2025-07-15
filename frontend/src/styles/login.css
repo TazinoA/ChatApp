@@ -1,65 +1,184 @@
-
-.sign-in-container{
-    width:100vw;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.sign-in-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(to bottom right, var(--slate-100), var(--slate-200));
 }
 
-.sign-in-board{
-    background-color: var(--primary-foreground);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border: 1px solid var(--border);
-    width:30%;
-    height: 70%;   
-    border-radius: 0.5rem;
+.sign-in-board {
+  background-color: var(--primary-foreground);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid var(--border);
+  width: 30%;
+  min-width: 400px;
+  height: 70%;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  position: relative;
 }
 
-
-
-.sign-in-board > img{
-    width: 3rem;
-    height:3rem;
-    border-radius: 50%;
-    margin-top:1.5rem;
-    margin-bottom:1rem;
+.sign-in-board > img {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  margin-top: 1.5rem;
 }
 
-.sign-in-board > h3{
-    margin:0;
+.sign-in-board > h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--foreground);
 }
 
-.login-input{
-    margin-bottom: 1.25rem;
+.sign-in-board .description {
+  margin-top: 0;
+  margin-bottom: 2rem;
+  color: var(--muted-foreground);
+  text-align: center;
+  font-size: 0.875rem;
 }
 
-.password{
-    display:flex;
-    width:90%;
+.sign-in-board label {
+  align-self: flex-start;
+  margin-left: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: var(--foreground);
 }
 
-.password >label{
-    margin:0;
+.sign-in-board input {
+  width: 90%;
+  border-radius: 0.375rem;
+  height: 2.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+  padding-left: 0.75rem;
+  font-size: 0.875rem;
+  transition: border-color 0.2s ease;
 }
 
-.forgot-password{
-    margin-left:auto;
+.sign-in-board input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
-.forgot-password:hover{
-    text-decoration: underline;
-    text-decoration-thickness: 1px;
+.sign-in-board input::placeholder {
+  color: var(--muted-foreground);
 }
 
-.sign-in-btn{
-    margin-top:0.75rem;
-    width:90%;
-    background-color: #18181B;
-    color:white;
-    border-radius: 0.5rem;
-    height:2.75rem;
-    margin-bottom: 0.75rem;
+.password {
+  display: flex;
+  width: 90%;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.password > label {
+  margin: 0;
+}
+
+.forgot-password {
+  color: var(--primary);
+  font-size: 0.875rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+}
+
+.sign-in-btn {
+  margin-top: 0.75rem;
+  width: 90%;
+  background-color: var(--foreground);
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  height: 2.75rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.sign-in-btn:hover {
+  background-color: var(--slate-700);
+}
+
+.continue-with {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  gap: 0.5rem;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  margin: 1rem 0;
+}
+
+.continue-with > span {
+  display: inline-block;
+  background-color: var(--border);
+  height: 1px;
+  flex: 1;
+}
+
+.alt-sign-in {
+  display: flex;
+  gap: 0.5rem;
+  width: 90%;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.alt-sign-in > button {
+  width: 50%;
+  height: 2.5rem;
+  border: 1px solid var(--border);
+  background-color: var(--primary-foreground);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 0.875rem;
+}
+
+.alt-sign-in > button:hover {
+  background-color: var(--slate-100);
+}
+
+.alt-sign-in img {
+  width: 1rem;
+  height: 1rem;
+}
+
+.has-account {
+  color: var(--muted-foreground);
+  margin-top: auto;
+  margin-bottom: 1.5rem;
+  font-size: 0.875rem;
+}
+
+.has-account > a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.has-account > a:hover {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
 }

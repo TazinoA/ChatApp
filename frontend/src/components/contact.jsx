@@ -10,7 +10,7 @@ export default function Contact(props) {
 
       <div className="meta-info">
         <p className="timestamp">{props.timestamp}</p>
-        {/* <span className="unread">1</span> */}
+        <span className="unread">1</span>
       </div>
     </div>
   );

@@ -23,14 +23,36 @@ export async function signUp(user){
     .catch(err => err);
 }
 
-export function validateInput(field, value){
+export function validateInput(field, value, relatedValue = ""){
     if(field === "name"){
-    return value.length >= 3 &&/^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/.test(value);
+         if(value.length < 3){
+            return "Name must be at least 3 characters long";
+         }else if (! /^[A-Za-zÀ-ÖØ-öø-ÿ' -]+$/.test(value)){
+            return "Please enter a valid name"
+         }
+         else{
+            return "valid";
+         }
+         
     }else if(field === "email"){
-        return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
-    }else if(fielid === "password"){
-        /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(value);
-    }else if(field === "confirmPassword"){
-        return value.password === value.confirmPassword;
+        if(!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value)){
+            return "Please enter a valid email address";
+        }
+        else{
+            return "valid";
+        }
+
+    }else if(field === "password"){
+        if(!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(value)){
+            return "Password must be at least 8 characters and contain 1 number"
+        }else{
+            return "valid";
+        }
+    }else if(field === "confirm"){
+        if(value !== relatedValue){
+            return "Passwords must match";
+        }else{
+            return "valid";
+        }
     }
 }

@@ -1,13 +1,12 @@
 :root {
-  /* Primary Colors */
   --primary: #3b82f6;
   --primary-foreground: #fafafa;
   
-  /* Background Colors */
+ 
   --background: #ffffff;
   --foreground: #0f172a;
   
-  /* Slate Scale */
+
   --slate-100: #f1f5f9;
   --slate-200: #e2e8f0;
   --slate-700: #334155;
@@ -16,7 +15,6 @@
   
   --border: #e2e8f0;
   
-  /* Text */
   --muted-foreground: #64748b;
   
   font-family: 'Inter', sans-serif;
@@ -81,7 +79,7 @@ header img{
 }
 
 
-/* ===== RESPONSIVE DESIGN ===== */
+
 @media (max-width: 768px) {
   .sign-in-board,
   .sign-up-board {

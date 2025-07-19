@@ -5,16 +5,18 @@ import ProtectedRoute from "../utils/ProtectedRoute.jsx";
 import ChatPage from "../pages/ChatPage.jsx";
 import ProfilePage from "../pages/ProfilePage.jsx";
 import NotFoundPage from "../pages/NotFound.jsx";
+import ForgotPassword from "../pages/ForgotPassword.jsx";
 import { useState } from "react";
 import AuthContext from "../utils/AuthContext.js";
 
 function App(){
-     const [loggedIn, setLoggedIn] = useState(true);
+     const [loggedIn, setLoggedIn] = useState(false);
   return <>
         <AuthContext.Provider value = {{loggedIn, setLoggedIn}}>
             <Routes>
             <Route path = "/" element = {<SignupPage />}></Route>
             <Route path = "/login" element = {<LoginPage />}></Route>
+            <Route path = "/forgot-password" element = {<ForgotPassword/>}></Route>
             <Route path = "*" element = {<NotFoundPage/>}/>
             <Route element = {<ProtectedRoute/>}>
                   <Route path = "/chat" element = {<ChatPage />}></Route>

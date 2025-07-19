@@ -1,12 +1,12 @@
 import { useState, useContext } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { signUp, validateInput } from "../utils/auth_handler";
 import AuthContext from "../utils/AuthContext";
 import Loading from "../components/Loading";
 import "../styles/signup.css";
 
 function SignUpPage() {
-    const { setLoggedIn } = useContext(AuthContext);
+    const { loggedIn ,setLoggedIn } = useContext(AuthContext);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -14,28 +14,40 @@ function SignUpPage() {
     const [nameError, setNameError] = useState("");
     const [emailError, setEmailError] = useState("");
     const [passwordError, setPasswordError] = useState("");
-    const [confirmPasswordError, setConfirmPasswordError] = useState("")
-    const [submitError, setSubmitError] = useState("")
+    const [confirmPasswordError, setConfirmPasswordError] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [submitError, setSubmitError] = useState("");
+    const [loading,setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if(nameError || emailError || passwordError || confirmPasswordError){
+        if (nameError || emailError || passwordError || confirmPasswordError) {
             setSubmitError("Please fix all errors before submitting");
-            return
+            return;
         }
 
-        if (await handleClick(name, email, password, confirmPassword)) {
+        setLoading(true);
+
+        const result = await handleClick(name, email, password, confirmPassword);
+
+        setLoading(false);
+
+        if (result.success) {
             setLoggedIn(true);
             navigate("/chat");
         } else {
-            setSubmitError("User already exists, go to the login page")
+            setSubmitError(result.message);
         }
     };
 
     return (
         <>
+         {loading ? (
+      <Loading variant="dots" fullScreen text="Signing you up..." />
+    ) :( 
         <div className="sign-up-container">
             <div className="sign-up-board">
                 <img src="https://cdn-icons-png.flaticon.com/128/8794/8794966.png" alt="Logo" />
@@ -104,60 +116,78 @@ function SignUpPage() {
 
                     <div className="form-data">
                         <label htmlFor="password">Password</label>
-                        <input
-                            type="password"
-                            name="password"
-                            value={password}
-                             onChange={(e) => {
-                                setPassword(e.target.value);
-                                if(passwordError){
-                                    const error = validateInput(e.target.name, e.target.value);
-                                    setPasswordError(error === "valid"?  "" : error)
-                                }
-                            }}
-                            required
-                            autoComplete="off"
-                            minLength={"8"}
-                            pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
-                            title="Passwords must be at least 8 characters long and contain at least 1 number"
-                            className={passwordError ? "error" : ""}
-                            onBlur = {(e) => {
-                                const error = validateInput(e.target.name, password);
-                                if(error !== "valid"){
-                                    setPasswordError(error);
-                                }else{
-                                    setPasswordError("");
-                                }
-                            }}
-                        />
+                        <div className="password-input-container">
+                            <input
+                                type={showPassword ? "text": "password"}
+                                name="password"
+                                value={password}
+                                onChange={(e) => {
+                                    setPassword(e.target.value);
+                                    if(passwordError){
+                                        const error = validateInput(e.target.name, e.target.value);
+                                        setPasswordError(error === "valid"?  "" : error)
+                                    }
+                                }}
+                                required
+                                autoComplete="off"
+                                minLength={"8"}
+                                pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
+                                title="Passwords must be at least 8 characters long and contain at least 1 number"
+                                className={`password-input ${passwordError ? "error" : ""}`}
+                                onBlur = {(e) => {
+                                    const error = validateInput(e.target.name, password);
+                                    if(error !== "valid"){
+                                        setPasswordError(error);
+                                    }else{
+                                        setPasswordError("");
+                                    }
+                                }}
+                            />
+                            <button 
+                                type="button"
+                                className="password-toggle"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                 <img src = {showPassword ? "https://cdn-icons-png.flaticon.com/128/709/709612.png": "https://cdn-icons-png.flaticon.com/128/10898/10898993.png"}/>
+                            </button>
+                        </div>
                     </div>
                     <p className = {`error-msg ${passwordError ? "" : "hidden"}`}>{passwordError}</p>
 
                     <div className="form-data">
                         <label htmlFor="confirm">Confirm Password</label>
-                        <input
-                            type="password"
-                            name="confirm"
-                            value={confirmPassword}
-                            autoComplete="off"
-                             onChange={(e) => {
-                                setConfirmPassword(e.target.value);
+                        <div className="password-input-container">
+                            <input
+                                type={showConfirmPassword ? "text": "password"}
+                                name="confirm"
+                                value={confirmPassword}
+                                autoComplete="off"
+                                onChange={(e) => {
+                                    setConfirmPassword(e.target.value);
 
-                                const error = validateInput(e.target.name,e.target.value, password);
-                                setConfirmPasswordError(error === "valid"?  "" : error)
-                            }}
-                            required
-                            title="Passwords must be at least 8 characters long and contain at least 1 number"
-                            className={confirmPasswordError ? "error" : ""}
-                            onBlur = {(e) => {
-                                const error = validateInput(e.target.name, e.target.value, password);
-                                if(error !== "valid"){
-                                    setConfirmPasswordError(error);
-                                }else{
-                                    setConfirmPasswordError("");
-                                }
-                            }}
-                        />
+                                    const error = validateInput(e.target.name,e.target.value, password);
+                                    setConfirmPasswordError(error === "valid"?  "" : error)
+                                }}
+                                required
+                                title="Passwords must be at least 8 characters long and contain at least 1 number"
+                                className={`password-input ${confirmPasswordError ? "error" : ""}`}
+                                onBlur = {(e) => {
+                                    const error = validateInput(e.target.name, e.target.value, password);
+                                    if(error !== "valid"){
+                                        setConfirmPasswordError(error);
+                                    }else{
+                                        setConfirmPasswordError("");
+                                    }
+                                }}
+                            />
+                            <button 
+                                type="button"
+                                className="password-toggle"
+                                onClick={() => setShowConfirmPassword(prev => !prev)}
+                            >
+                                 <img src = {showConfirmPassword ? "https://cdn-icons-png.flaticon.com/128/709/709612.png": "https://cdn-icons-png.flaticon.com/128/10898/10898993.png"}/>
+                            </button>
+                        </div>
                     </div>
                     <p className = {`error-msg ${confirmPasswordError ? "" : "hidden"}`}>{confirmPasswordError}</p>
 
@@ -171,9 +201,6 @@ function SignUpPage() {
                 </div>
 
                 <div className="alt-sign-in">
-                    <button className="github">
-                        <img src="https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png" alt="GitHub logo" /> Github
-                    </button>
                     <button className="google">
                         <img src="https://www.gstatic.com/marketing-cms/assets/images/ef/8c/be724dfe44f88ea9f229c060dd0d/chrome-dino.webp=n-w96-h103-fcrop64=1,00000980fffff700-rw" alt="Google logo" /> Google
                     </button>
@@ -182,6 +209,7 @@ function SignUpPage() {
                 <p className="has-account">Already have an account? <a href="/login">Sign in</a></p>
             </div>
         </div>
+    )}
     </>
     );
 }
@@ -195,13 +223,16 @@ async function handleClick(fullName, email, password, confirmPassword) {
         email: email,
         password: password,
         name: fullName,
+        confirmPassword:confirmPassword,
     };
 
     const response = await signUp(user);
-    console.log(response);
-
-    return response.status === 200;
+      if (response.status === 200) {
+    return { success: true };
+  } else {
+    const message = response.response?.data?.message || "Signup failed";
+    return { success: false, message };
+  }
 }
-
 
 export default SignUpPage;

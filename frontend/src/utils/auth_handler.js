@@ -12,12 +12,13 @@ export async function login(user) {
 
 
 export async function signUp(user){
-  const {name, email, password} = user;
+  const {name, email, password, confirmPassword} = user;
 
   return await axios.post("http://localhost:5000/auth/signup", {
         email: email,
         password: password,
-        name: name
+        name: name,
+        confirmPassword:confirmPassword,
     })
     .then(response => response)
     .catch(err => err);

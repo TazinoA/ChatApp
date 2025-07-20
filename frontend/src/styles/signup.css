@@ -101,25 +101,6 @@
   align-items: center;
 }
 
-.error-msg{
-  color: red;
-  height: 1.5rem;
-  font-size: small;
-  margin: 0;
-}
-
-input.error:focus {
-  outline: none;
-  border-color: red;
-  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
-}
-
-input.error {
-  outline: none;
-  border-color: red;
-  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
-}
-
 form{
   width: 100%;
   display: flex;

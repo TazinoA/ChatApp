@@ -6,7 +6,7 @@ import Loading from "../components/Loading";
 import "../styles/signup.css";
 
 function SignUpPage() {
-    const { loggedIn ,setLoggedIn } = useContext(AuthContext);
+    const {loggedIn ,setLoggedIn } = useContext(AuthContext);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");

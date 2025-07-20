@@ -1,8 +1,13 @@
 import axios from "axios";
 
+const api = axios.create({
+    withCredentials:true,
+    baseURL:import.meta.env.VITE_API_BASE_URL
+})
+
 export async function login(user) {
     const { email, password } = user;
-    return await axios.post("http://localhost:5000/auth/login", {
+    return await api.post("/auth/login", {
         email: email,
         password: password
     })
@@ -14,7 +19,7 @@ export async function login(user) {
 export async function signUp(user){
   const {name, email, password, confirmPassword} = user;
 
-  return await axios.post("http://localhost:5000/auth/signup", {
+  return await api.post("/auth/signup", {
         email: email,
         password: password,
         name: name,
@@ -56,4 +61,10 @@ export function validateInput(field, value, relatedValue = ""){
             return "valid";
         }
     }
+}
+
+export async function verifyToken(){
+    return await api.post("/auth/verify-token")
+    .then(response => response.response.data)
+    .catch(err => err.response.data);
 }

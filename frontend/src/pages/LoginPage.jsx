@@ -7,7 +7,7 @@ import Loading from "../components/Loading";
 import "../styles/login.css"
 
 function LoginPage(){
-    const {loggedIn, setLoggedIn} = useContext(AuthContext);
+    const { setLoggedIn} = useContext(AuthContext);
     const [email,setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [submitError, setSubmitError] = useState("");

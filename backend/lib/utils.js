@@ -11,14 +11,13 @@ export default function generateToken(user, res){
     res.cookie("accessToken", token, {
         httpOnly: true,
         secure:false,
-        sameSite:"None",
+        sameSite:"Lax",
         maxAge: 1000 * 60 * 60 * 24,
     });
     return token;
 }
 
 export function verifyToken(req, res, next) {
-  //console.log(req.cookies)
   try {
     const accessToken = req.cookies.accessToken;
 

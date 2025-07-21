@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { signUp, validateInput } from "../utils/auth_handler";
 import AuthContext from "../utils/AuthContext";
@@ -6,7 +6,7 @@ import Loading from "../components/Loading";
 import "../styles/signup.css";
 
 function SignUpPage() {
-    const {loggedIn ,setLoggedIn } = useContext(AuthContext);
+    const { loggedIn, setLoggedIn, checkingAuth } = useContext(AuthContext);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -20,6 +20,10 @@ function SignUpPage() {
     const [submitError, setSubmitError] = useState("");
     const [loading,setLoading] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+            setLoading(checkingAuth);
+        } ,[checkingAuth])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -46,7 +50,7 @@ function SignUpPage() {
     return (
         <>
          {loading ? (
-      <Loading variant="dots" fullScreen text="Signing you up..." />
+      <Loading variant="dots" text="Signing you up..." />
     ) :( 
         <div className="sign-up-container">
             <div className="sign-up-board">

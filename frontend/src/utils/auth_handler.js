@@ -1,8 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
+    baseURL:import.meta.env.VITE_API_BASE_URL,
     withCredentials:true,
-    baseURL:import.meta.env.VITE_API_BASE_URL
 })
 
 export async function login(user) {
@@ -65,6 +65,13 @@ export function validateInput(field, value, relatedValue = ""){
 
 export async function verifyToken(){
     return await api.post("/auth/verify-token")
-    .then(response => response.response.data)
-    .catch(err => err.response.data);
+    .then(response => response.data)
+    .catch(err => err);
+}
+
+
+export async function logOut(){
+    return await api.post("/auth/logout")
+    .then(response => response)
+    .catch(err => err)
 }

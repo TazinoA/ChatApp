@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { login } from "../utils/auth_handler";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../utils/AuthContext";
@@ -7,7 +7,7 @@ import Loading from "../components/Loading";
 import "../styles/login.css"
 
 function LoginPage(){
-    const { setLoggedIn} = useContext(AuthContext);
+    const { loggedIn,setLoggedIn, checkingAuth} = useContext(AuthContext);
     const [email,setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [submitError, setSubmitError] = useState("");
@@ -15,6 +15,10 @@ function LoginPage(){
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+ useEffect(() => {
+            setLoading(checkingAuth);
+        } ,[checkingAuth])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -39,7 +43,7 @@ function LoginPage(){
     }
 
     return <>
-        {loading ?(<Loading variant="dots" fullScreen text="Signing you in..." />): (
+        {loading ?(<Loading variant="dots" text="Signing you in..." />): (
        <div className = "sign-in-container">
            <div className = "sign-in-board">
 

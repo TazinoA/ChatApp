@@ -20,4 +20,13 @@ app.post("/auth/verify-token", verifyToken, (req, res) =>{
     res.status(200).json({isValid:true})
 });
 
+app.post("/auth/logout", (req, res) => {
+    res.clearCookie("accessToken",{
+        httpOnly: true,
+        secure:false,
+        sameSite:"Lax",
+    });
+    return res.status(200).json({message: "Logged out successfully"})
+})
+
 app.listen(5000, () => console.log("server running on port 5000"));

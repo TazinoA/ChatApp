@@ -32,7 +32,10 @@ async function signup(req, res) {
     );
 
     const userResult = await pool.query(`SELECT id FROM users WHERE email = $1`, [email]);
-    const user = { id: userResult.rows[0].id };
+    const user = {
+       id: userResult.rows[0].id,
+       email:email,
+      };
     const token = generateToken(user, res);
 
     return res.status(200).json({ access_token: token });
@@ -65,7 +68,10 @@ async function login(req, res) {
       return res.status(401).json({ message: "Incorrect email or password" });
     }
 
-    const user = { id: userRow.id };
+    const user = { 
+      id: userRow.id,
+      email:email,
+     };
     const token = generateToken(user, res);
 
     return res.status(200).json({ access_token: token });

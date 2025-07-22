@@ -14,6 +14,8 @@ export default function ProfilePage(){
     const file = e.target.files[0];
     if (!file) return;
 
+    setIsUpdatingProfile(true);
+
     const reader = new FileReader();
 
     reader.readAsDataURL(file);
@@ -23,6 +25,7 @@ export default function ProfilePage(){
       setSelectedImg(base64Image);
       await updateProfilePic({ profilePic: base64Image });
     };
+    setIsUpdatingProfile(false);
   };
 
     return <>
@@ -35,7 +38,7 @@ export default function ProfilePage(){
             <p>Your profile information</p>
 
             <div className="profile-img-container">
-                <img src= {selectedImg || "/avatar.png"} className="profile-img" alt="Profile" />
+                <img src= {selectedImg || authUser.profile_pic || "/avatar.png"} className="profile-img" alt="Profile" />
                 <label htmlFor="avatar-upload" className="camera-icon" role="button" tabIndex={0}>
                     <Camera />
                 </label>
@@ -65,7 +68,7 @@ export default function ProfilePage(){
 
             <div className="account-info">
                 <h4>Account information</h4>
-                <p>Member since: <span>1st february 2002</span></p>
+                <p>Member since: <span>{authUser.date_joined.split("T")[0]}</span></p>
                 <hr/>
                 <p>Account status: <span>Active</span></p>
             </div>

@@ -1,6 +1,6 @@
 import { pool } from "../lib/db.js";
 
-async function sendMessage(req, res) {
+export async function sendMessage(req, res) {
   const { sender_id, receiver_id, content } = req.body;
 
   if (!sender_id || !receiver_id || !content) {
@@ -20,4 +20,17 @@ async function sendMessage(req, res) {
   }
 }
 
-export default sendMessage;
+
+export async function updateProfilePic(req, res){
+    const {profilePic} = req.body;
+    const userId = req.user.id;
+
+    try{
+      await pool.query(`UPDATE users SET profile_pic = $1 WHERE id = $2`, [profilePic, userId]);
+      res.status(200).json({message:"Successfully updated profile photo"});
+    } catch(e){
+      console.error("DB Error: ", e)
+      res.status(500).json({message:"Internal server error"});
+    }
+}
+

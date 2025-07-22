@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import AuthContext from "../utils/AuthContext";
 import { validateInput } from "../utils/auth_handler";
 import Loading from "../components/Loading";
-import "../styles/login.css"
+import "../styles/login.css";
 
 function LoginPage(){
     const { loggedIn,setLoggedIn, checkingAuth} = useContext(AuthContext);

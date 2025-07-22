@@ -17,7 +17,7 @@ function App(){
 
      useEffect(() => {
   const checkToken = async () => {
-    let result
+    let result;
     try {
       result = await verifyToken();
       setLoggedIn(result.isValid);
@@ -26,7 +26,7 @@ function App(){
       setLoggedIn(false);
     }finally{
       setCheckingAuth(false);
-      setAuthUser(result.authUser);
+      setAuthUser(result.user);
     }
   };
 

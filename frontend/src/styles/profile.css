@@ -97,7 +97,7 @@
 }
 
 /* ===== HIDDEN FILE INPUT ===== */
-.hidden {
+input.hidden {
   display: none;
 }
 

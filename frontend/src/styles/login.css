@@ -150,6 +150,7 @@
 .sign-in-btn:hover {
   background-color: var(--slate-700);
 }
+
 .error-msg{
   color: red;
   height: 1.5rem;
@@ -168,6 +169,8 @@ input.error {
   border-color: red;
   box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
 }
+
+
 
 @media (max-width: 768px) {
   .password-toggle {

@@ -177,6 +177,8 @@ form{
   text-decoration-thickness: 1px;
 }
 
+
+
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
   .password-toggle {

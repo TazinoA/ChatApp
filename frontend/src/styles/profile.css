@@ -36,13 +36,69 @@
   text-align: center;
 }
 
+/* ===== PROFILE IMAGE CONTAINER ===== */
+.profile-img-container {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
 .profile-img {
   height: 6rem;
   width: 6rem;
-  margin-bottom: 1rem;
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid var(--border);
+  transition: border-color 0.2s ease;
+}
+
+.profile-img:hover {
+  border-color: var(--primary);
+}
+
+/* ===== CAMERA ICON POSITIONING ===== */
+.camera-icon {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  background-color: var(--primary);
+  border: 2px solid var(--background);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.camera-icon:hover {
+  background-color: var(--slate-700);
+  transform: scale(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.camera-icon:active {
+  transform: scale(0.95);
+}
+
+.camera-icon:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.camera-icon svg {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: white;
+  stroke-width: 2;
+}
+
+/* ===== HIDDEN FILE INPUT ===== */
+.hidden {
+  display: none;
 }
 
 .profile-board .label {
@@ -129,4 +185,53 @@
   border: none;
   border-top: 1px solid var(--border);
   margin: 0.5rem 1rem;
+}
+
+
+@media (max-width: 768px) {
+  .profile-board {
+    width: 90%;
+    min-width: unset;
+    margin: 1rem;
+  }
+  
+  .profile-img {
+    height: 5rem;
+    width: 5rem;
+  }
+  
+  .camera-icon {
+    width: 1.75rem;
+    height: 1.75rem;
+  }
+  
+  .camera-icon svg {
+    width: 1rem;
+    height: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-container {
+    padding: 1rem;
+  }
+  
+  .profile-board {
+    width: 95%;
+  }
+  
+  .profile-img {
+    height: 4rem;
+    width: 4rem;
+  }
+  
+  .camera-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  
+  .camera-icon svg {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
 }

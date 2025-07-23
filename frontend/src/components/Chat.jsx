@@ -1,14 +1,26 @@
 import {createMessage} from "./Message.jsx";
-import messages from "../utils/messages.js";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "../utils/AuthContext";
+import { getMessages } from "../utils/api.js";
 
 export default function Chat(props){
-    const {authUser, setShowPlaceholder, selectedChat} = useContext(AuthContext);
+     const [messages, setMessages] = useState([]);
+     const {authUser, setShowPlaceholder, selectedChat} = useContext(AuthContext);
+
+      useEffect(() =>{
+          const fetchMessages = async () =>{
+            const messages = await getMessages(selectedChat.contactId);
+            console.log(authUser)
+            // console.log("Fetched messages:", messages)
+            setMessages(messages)
+          }
+          fetchMessages();
+      },[selectedChat])
+
     return <>
         <div className="chat-container">
             <header>
-            <img className="avatar" src={props.avatar} alt={`${props.name}'s avatar`} />
+            <img className="avatar" src={props.profile_pic} alt={`${props.name}'s avatar`} />
 
             <div className="chat-info">
                 <h3 className="contact-name">{props.name}</h3>

@@ -13,7 +13,7 @@ export default function Contact(props) {
         placeholder:false
       }));
       }}>
-      <img className="avatar" src={props.avatar} alt={`${props.name}'s avatar`} />
+      <img className="avatar" src={props.profile_pic} alt={`${props.name}'s avatar`} />
 
       <div className="contact-info">
         <h3 className="contact-name">{props.name}</h3>
@@ -33,10 +33,10 @@ export function createContact(contact) {
     <Contact
       key={contact.id}
       contactId = {contact.id}
-      avatar={contact.avatar}
+      profile_pic={contact.profile_pic || "/avatar.png"}
       name={contact.name}
-      lastMessage={contact.lastMessage}
-      timestamp={contact.timestamp}
+      lastMessage={contact.lastMessage || "Hello"}
+      timestamp={contact.timestamp || "3m ago"}
     />
   );
 }

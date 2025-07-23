@@ -21,7 +21,7 @@ export default function ChatPage(){
         <NavBar/>
         <div className="main-section">
             <SideBar/>
-            {showPlaceholder || selectedChat?.placeholder ? (<Placeholder />) : (<Chat avatar={selectedChat.avatar} name={selectedChat.name} />)}
+            {showPlaceholder || selectedChat?.placeholder ? (<Placeholder />) : (<Chat profile_pic={selectedChat.profile_pic} name={selectedChat.name} />)}
             
         </div>
     </>

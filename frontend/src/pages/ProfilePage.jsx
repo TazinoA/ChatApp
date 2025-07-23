@@ -3,7 +3,7 @@ import "../styles/profile.css";
 import { Camera } from 'lucide-react';
 import {useState, useContext} from "react";
 import AuthContext from "../utils/AuthContext.js";
-import { updateProfilePic } from "../utils/utils.js";
+import { updateProfilePic } from "../utils/api.js";
 
 export default function ProfilePage(){
     const {authUser} = useContext(AuthContext);

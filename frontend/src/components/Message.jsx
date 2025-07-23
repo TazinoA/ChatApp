@@ -13,14 +13,15 @@ export default function Message(props) {
 
 export function createMessage(message, authUser, selectedChat){
   const defaultAvatar = "./avatar.png";
-    const profilePicUrl = message.isSent
-    ? authUser?.profile_pic || defaultAvatar
-    : selectedChat.avatar|| defaultAvatar;
+
+    const profilePicUrl = message.isSent ? authUser?.profile_pic || defaultAvatar : selectedChat.profile_pic|| defaultAvatar;
+
     return <Message
             key = {message.id}
+            id = {message.id}
             content = {message.content}
             timestamp = {message.timestamp} 
             profilePicUrl = {profilePicUrl}
-            isSent = {message.isSent}
+            isSent = {message.senderid === authUser.id}
          />
 }

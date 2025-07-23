@@ -1,8 +1,18 @@
 import "../styles/chat.css"
-import contacts from "../utils/contacts.js"
+import {useEffect, useState} from "react";
+import { getContacts } from "../utils/api";
 import {createContact} from "./contact.jsx";
 
 export default function SideBar(){
+      const [contacts, setContacts] = useState([])
+  useEffect(() =>{
+      const fetchContacts = async () =>{
+        const contacts = await getContacts();
+        setContacts(contacts)
+      }
+      fetchContacts();
+  },[])
+
     return <>
       <div className="sidebar-container">
         <div className="sidebar">

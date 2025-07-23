@@ -1,3 +1,14 @@
+import "../styles/not-found.css"
+
 export default function NotFoundPage(){
-    return <h1>The page you are looking for does not exist</h1>
+    return (
+        <>
+        <canvas id="canvas" hidden></canvas>
+        <div class="center">
+            <h1>404</h1>
+
+            <p>PAGE NOT FOUND.</p>
+        </div>
+        </>
+    )
 }

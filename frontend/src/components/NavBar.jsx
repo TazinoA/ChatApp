@@ -4,7 +4,7 @@ import AuthContext from "../utils/AuthContext";
 import { useContext } from "react";
 
 function NavBar(){
-    const {setLoggedIn} = useContext(AuthContext);
+    const {setLoggedIn, setSelectedChat, setShowPlaceholder} = useContext(AuthContext);
     const navigate = useNavigate()
     return <>
     <header>
@@ -18,6 +18,9 @@ function NavBar(){
                 <Link className="nav-link" onClick={async () => {
                     await logOut();
                     setLoggedIn(false);
+                    localStorage.removeItem("selectedChat");
+                    setSelectedChat(null);
+                    setShowPlaceholder(true);
                     navigate("/login");
                 }}><img src = "https://cdn-icons-png.flaticon.com/128/15604/15604005.png"/>Logout</Link>
         </div>

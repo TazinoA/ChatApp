@@ -10,13 +10,11 @@ body {
   color: #0f172a;
 }
 
-
 .main-section {
   display: flex;
   height: calc(100vh - 64px);
   background-color: #f1f5f9;
 }
-
 
 .sidebar-container {
   width: 20%;
@@ -80,7 +78,6 @@ body {
   background-color: #f1f5f9;
 }
 
-
 .sidebar-container .contact {
   display: flex;
   align-items: center;
@@ -112,7 +109,7 @@ body {
   min-width: 0;
 }
 
-.sidebar-container .contact-name {
+.sidebar-container .contact-info .contact-name {
   font-size: 16px;
   font-weight: 600;
   color: #0f172a;
@@ -154,7 +151,6 @@ body {
   font-size: 12px;
   font-weight: 600;
 }
-
 
 .chat-container {
   flex: 1;
@@ -235,7 +231,6 @@ body {
   height: 20px;
 }
 
-
 .chat-container .message-container {
   flex: 1;
   padding: 16px;
@@ -243,6 +238,21 @@ body {
   background-color: #f8fafc;
 }
 
+.placeholder{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.placeholder>img{
+  margin-bottom: 1rem;
+}
+
+.placeholder>h2{
+  margin-bottom: 1rem;
+}
 
 /* ===== MESSAGE COMPONENT STYLES ===== */
 .text-container {
@@ -520,7 +530,6 @@ body {
   background-color: rgba(100, 116, 139, 0.3);
   border-radius: 2px;
 }
-
 
 .chat-container footer {
   background-color: #ffffff;

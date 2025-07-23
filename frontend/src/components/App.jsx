@@ -14,9 +14,11 @@ function App(){
      const [loggedIn, setLoggedIn] = useState(false);
      const [checkingAuth, setCheckingAuth] = useState(true);
      const [authUser, setAuthUser] = useState(null);
+     const [showPlaceholder, setShowPlaceholder] = useState(true);
+     const [selectedChat, setSelectedChat] = useState(null);
 
      useEffect(() => {
-  const checkToken = async () => {
+    const checkToken = async () => {
     let result;
     try {
       result = await verifyToken();
@@ -33,9 +35,16 @@ function App(){
   checkToken();
 }, []);
 
+useEffect(() => {
+  const storedChat = localStorage.getItem("selectedChat");
+  if (storedChat) {
+    setSelectedChat(JSON.parse(storedChat));
+  }
+}, []);
+
 
   return <>
-        <AuthContext.Provider value = {{loggedIn, setLoggedIn, checkingAuth, authUser}}>
+        <AuthContext.Provider value = {{loggedIn, setLoggedIn, checkingAuth, authUser, showPlaceholder, setShowPlaceholder, selectedChat, setSelectedChat}}>
             <Routes>
             <Route path = "/" element = {loggedIn ? <Navigate to = "/chat"/> : <SignupPage />}></Route>
             <Route path = "/login" element = {loggedIn ? <Navigate to = "/chat"/> : <LoginPage />}></Route>

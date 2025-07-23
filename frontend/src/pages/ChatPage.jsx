@@ -3,13 +3,26 @@ import SideBar from "../components/SideBar.jsx"
 import NavBar from "../components/NavBar.jsx"
 import Placeholder from "../components/Placeholder.jsx"
 import Chat from "../components/Chat.jsx"
+import { useContext, useEffect } from "react"
+import AuthContext from "../utils/AuthContext.js"
+
 export default function ChatPage(){
+    const {showPlaceholder,setShowPlaceholder, selectedChat} = useContext(AuthContext);
+
+    useEffect(() => {
+          if(selectedChat){
+            setShowPlaceholder(false);
+          }else{
+            setShowPlaceholder(true);
+          } 
+    }, [selectedChat])
+    
     return <>
         <NavBar/>
         <div className="main-section">
             <SideBar/>
-            {/* <Placeholder/> */}
-            <Chat avatar = "https://randomuser.me/api/portraits/women/15.jpg" name = "Olivia Benson"/>
+            {showPlaceholder || selectedChat?.placeholder ? (<Placeholder />) : (<Chat avatar={selectedChat.avatar} name={selectedChat.name} />)}
+            
         </div>
     </>
 }

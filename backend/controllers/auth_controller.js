@@ -3,6 +3,10 @@ import bcrypt from "bcrypt";
 import generateToken from "../lib/utils.js";
 
 async function signup(req, res) {
+  if( !req.body ){
+     return res.status(400).json({ message: "All fields required" });
+  }
+
   const { name, email, password, confirmPassword } = req.body;
 
   // Server-side validation
@@ -28,7 +32,7 @@ async function signup(req, res) {
     const password_hash = await bcrypt.hash(password, 10);
     await pool.query(
       `INSERT INTO users(name, email, password_hash) VALUES($1, $2, $3)`,
-      [name, email, password_hash]
+      [titleCase(name), email, password_hash]
     );
 
     const userResult = await pool.query(`SELECT id FROM users WHERE email = $1`, [email]);
@@ -48,6 +52,10 @@ async function signup(req, res) {
 }
 
 async function login(req, res) {
+  if( !req.body ){
+     return res.status(400).json({ message: "All fields required" });
+  }
+
   const { email, password } = req.body;
 
   if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email)) {
@@ -83,4 +91,22 @@ async function login(req, res) {
   }
 }
 
-export { signup, login };
+async function logout(req, res){
+  res.clearCookie("accessToken",{
+        httpOnly: true,
+        secure:false,
+        sameSite:"Lax",
+    });
+    return res.status(200).json({message: "Logged out successfully"})
+}
+
+
+function titleCase(str) {
+  return str
+    .trim()                      // Remove leading/trailing spaces
+    .split(/\s+/)                // Split by any number of spaces (1 or more)
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');                  // Join back with a single space
+}
+
+export { signup, login, logout };

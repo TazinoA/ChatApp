@@ -66,7 +66,7 @@ async function login(req, res) {
     const result = await pool.query(`SELECT * FROM users WHERE email = $1`, [email]);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: "User does not exist, go to the signup page" });
+      return res.status(404).json({ message: "Invalid credentials" });
     }
 
     const userRow = result.rows[0];
@@ -104,7 +104,7 @@ async function logout(req, res){
 function titleCase(str) {
   return str
     .trim()                      // Remove leading/trailing spaces
-    .split(/\s+/)                // Split by any number of spaces (1 or more)
+    .split(/\s+/)
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');                  // Join back with a single space
 }

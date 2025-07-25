@@ -17,12 +17,7 @@ export default function Contact(props) {
 
       <div className="contact-info">
         <h3 className="contact-name">{props.name}</h3>
-        <p className="last-message">{props.lastMessage}</p>
-      </div>
-
-      <div className="meta-info">
-        <p className="timestamp">{props.timestamp}</p>
-        <span className="unread">1</span>
+        <p className="status">Online</p>
       </div>
     </div>
   );
@@ -35,8 +30,6 @@ export function createContact(contact) {
       contactId = {contact.id}
       profile_pic={contact.profile_pic || "/avatar.png"}
       name={contact.name}
-      lastMessage={contact.lastMessage || "Hello"}
-      timestamp={contact.timestamp || "3m ago"}
     />
   );
 }

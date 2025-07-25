@@ -13,15 +13,26 @@ export default function Message(props) {
 
 export function createMessage(message, authUser, selectedChat){
   const defaultAvatar = "./avatar.png";
+  const isSent = message.senderid === authUser.id
 
-    const profilePicUrl = message.isSent ? authUser?.profile_pic || defaultAvatar : selectedChat.profile_pic|| defaultAvatar;
+    const profilePicUrl = isSent ? authUser?.profile_pic || defaultAvatar : selectedChat.profile_pic|| defaultAvatar;
+    const timestamp = formatDate(message.timestamp)
 
     return <Message
             key = {message.id}
             id = {message.id}
             content = {message.content}
-            timestamp = {message.timestamp} 
+            timestamp = {timestamp} 
             profilePicUrl = {profilePicUrl}
-            isSent = {message.senderid === authUser.id}
+            isSent = {isSent}
          />
+}
+
+function formatDate(inputDate){
+  const date = new Date(inputDate);
+  return date.toLocaleTimeString([], {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
 }

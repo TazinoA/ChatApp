@@ -9,6 +9,7 @@ import ForgotPassword from "../pages/ForgotPassword.jsx";
 import { useState, useEffect } from "react";
 import AuthContext from "../utils/AuthContext.js";
 import { verifyToken } from "../utils/auth_handler.js";
+import socket from "../utils/socket.js";
 
 function App(){
      const [loggedIn, setLoggedIn] = useState(false);
@@ -16,6 +17,8 @@ function App(){
      const [authUser, setAuthUser] = useState(null);
      const [showPlaceholder, setShowPlaceholder] = useState(true);
      const [selectedChat, setSelectedChat] = useState(null);
+
+ 
 
      useEffect(() => {
     const checkToken = async () => {

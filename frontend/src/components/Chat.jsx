@@ -10,8 +10,6 @@ export default function Chat(props){
       useEffect(() =>{
           const fetchMessages = async () =>{
             const messages = await getMessages(selectedChat.contactId);
-            console.log(authUser)
-            // console.log("Fetched messages:", messages)
             setMessages(messages)
           }
           fetchMessages();

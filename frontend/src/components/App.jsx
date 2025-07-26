@@ -12,6 +12,7 @@ import { verifyToken } from "../utils/auth_handler.js";
 import socket from "../utils/socket.js";
 
 function App(){
+     const [isConnected, setIsConnected] = useState(socket.connected);
      const [loggedIn, setLoggedIn] = useState(false);
      const [checkingAuth, setCheckingAuth] = useState(true);
      const [authUser, setAuthUser] = useState(null);
@@ -34,9 +35,34 @@ function App(){
       setAuthUser(result.user);
     }
   };
-
   checkToken();
 }, []);
+
+useEffect(() =>{
+  if(!authUser) return;
+
+  function onConnect() {
+      setIsConnected(true);
+    }
+
+    function onDisconnect() {
+      setIsConnected(false);
+    }
+
+  socket.connect();
+  
+  socket.on("connect", onConnect);
+  socket.on("disconnect",onDisconnect);
+
+  return () =>{
+    socket.off('connect', onConnect);
+    socket.off('disconnect', onDisconnect);
+  }
+
+
+}, [authUser]);
+
+  
 
 useEffect(() => {
   const storedChat = localStorage.getItem("selectedChat");
@@ -47,7 +73,7 @@ useEffect(() => {
 
 
   return <>
-        <AuthContext.Provider value = {{loggedIn, setLoggedIn, checkingAuth, authUser, showPlaceholder, setShowPlaceholder, selectedChat, setSelectedChat}}>
+        <AuthContext.Provider value = {{loggedIn, setLoggedIn, checkingAuth, authUser, showPlaceholder, setShowPlaceholder, selectedChat, setSelectedChat, socket}}>
             <Routes>
             <Route path = "/" element = {loggedIn ? <Navigate to = "/chat"/> : <SignupPage />}></Route>
             <Route path = "/login" element = {loggedIn ? <Navigate to = "/chat"/> : <LoginPage />}></Route>

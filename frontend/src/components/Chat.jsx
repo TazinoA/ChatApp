@@ -5,15 +5,37 @@ import { getMessages } from "../utils/api.js";
 
 export default function Chat(props){
      const [messages, setMessages] = useState([]);
-     const {authUser, setShowPlaceholder, selectedChat} = useContext(AuthContext);
+     const [currentMessage, setCurrentMessage] = useState("");
+     const {authUser, setShowPlaceholder, selectedChat, socket} = useContext(AuthContext);
 
       useEffect(() =>{
           const fetchMessages = async () =>{
             const messages = await getMessages(selectedChat.contactId);
-            setMessages(messages)
+            setMessages(messages);
           }
           fetchMessages();
       },[selectedChat])
+
+      useEffect(() =>{
+
+        function onReceiveMessage(message){
+            setMessages(prevMessages => [...prevMessages, message]);
+        }
+
+        socket.on("receive-message", onReceiveMessage);
+
+        return () =>{
+            socket.off("receive-message", onReceiveMessage);
+        }
+      }, [])
+
+
+      useEffect(() => {
+            const container = document.querySelector(".message-container");
+            if (container) {
+                container.scrollTop = container.scrollHeight;
+            }
+      }, [messages]);
 
     return <>
         <div className="chat-container">
@@ -34,12 +56,32 @@ export default function Chat(props){
             </div>
         </header>
         <div className="message-container">
-           {messages.map(msg => createMessage(msg, authUser, selectedChat))}
+           {messages.length > 0 && authUser && selectedChat &&  messages.map(msg => createMessage(msg, authUser, selectedChat))}
         </div>
         <footer>
-            <input type = "text" placeholder="Type a message..."></input>
+            <input 
+            type = "text" 
+            placeholder="Type a message..." 
+            value = {currentMessage} 
+            onChange = {(e) => {
+                setCurrentMessage(e.target.value)
+            }}></input>
             <button>Photo</button>
-            <button>Send</button>
+            <button onClick= {
+                () =>{
+                    if (currentMessage.trim() === "") return;
+
+                    const messageToSend = {
+                        senderid:authUser.id,
+                        receiverid:selectedChat.contactId,
+                        content:currentMessage,
+                        timestamp: Date.now()
+                    }
+                    socket.emit("send-message", messageToSend);
+
+                    setCurrentMessage("");
+                }
+            }>Send</button>
         </footer>
         </div>
     </>

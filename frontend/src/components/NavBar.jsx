@@ -4,7 +4,7 @@ import AuthContext from "../utils/AuthContext";
 import { useContext } from "react";
 
 function NavBar(){
-    const {setLoggedIn, setSelectedChat, setShowPlaceholder} = useContext(AuthContext);
+    const {setLoggedIn, setSelectedChat, setShowPlaceholder, socket} = useContext(AuthContext);
     const navigate = useNavigate()
     return <>
     <header>
@@ -18,6 +18,7 @@ function NavBar(){
                 <Link className="nav-link" onClick={async () => {
                     await logOut();
                     setLoggedIn(false);
+                    socket.disconnect();
                     localStorage.removeItem("selectedChat");
                     setSelectedChat(null);
                     setShowPlaceholder(true);

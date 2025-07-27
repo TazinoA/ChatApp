@@ -2,6 +2,7 @@ import {createMessage} from "./Message.jsx";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../utils/AuthContext";
 import { getMessages } from "../utils/api.js";
+import { sendMessage } from "../utils/api.js";
 
 export default function Chat(props){
      const [messages, setMessages] = useState([]);
@@ -78,6 +79,8 @@ export default function Chat(props){
                         timestamp: Date.now()
                     }
                     socket.emit("send-message", messageToSend);
+
+                    sendMessage(messageToSend);
 
                     setCurrentMessage("");
                 }

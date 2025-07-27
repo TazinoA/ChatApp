@@ -1,16 +1,16 @@
 import { pool } from "../lib/db.js";
 
 export async function sendMessage(req, res) {
-  const { sender_id, receiver_id, content } = req.body;
+  const { senderid, receiverid, content } = req.body;
 
-  if (!sender_id || !receiver_id || !content) {
+  if (!senderid || !receiverid || !content) {
     return res.status(400).json({ message: "All fields required" });
   }
 
   try {
     await pool.query(
       `INSERT INTO messages (senderid, receiverid, content) VALUES ($1, $2, $3)`,
-      [sender_id, receiver_id, content]
+      [senderid, receiverid, content]
     );
 
     res.status(200).json({ message: "Successfully sent message" });

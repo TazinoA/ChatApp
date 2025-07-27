@@ -43,6 +43,7 @@ useEffect(() =>{
 
   function onConnect() {
       setIsConnected(true);
+      socket.emit("register", authUser.id)
     }
 
     function onDisconnect() {

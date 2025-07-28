@@ -1,4 +1,4 @@
-import {Route, Routes, Navigate} from "react-router-dom";
+import {Route, Routes, Navigate, useLocation} from "react-router-dom";
 import SignupPage from "../pages/SignUpPage.jsx";
 import LoginPage from "../pages/LoginPage.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
@@ -13,13 +13,14 @@ import socket from "../utils/socket.js";
 
 function App(){
      const [isConnected, setIsConnected] = useState(socket.connected);
+     const [userSocketMap, setUserSocketMap] = useState(null);
      const [loggedIn, setLoggedIn] = useState(false);
      const [checkingAuth, setCheckingAuth] = useState(true);
      const [authUser, setAuthUser] = useState(null);
      const [showPlaceholder, setShowPlaceholder] = useState(true);
      const [selectedChat, setSelectedChat] = useState(null);
+     const location = useLocation();
 
- 
 
      useEffect(() => {
     const checkToken = async () => {
@@ -38,6 +39,7 @@ function App(){
   checkToken();
 }, []);
 
+
 useEffect(() =>{
   if(!authUser) return;
 
@@ -50,17 +52,22 @@ useEffect(() =>{
       setIsConnected(false);
     }
 
+    function fetchOnlineUsers(socketMap){
+        setUserSocketMap(socketMap);
+        //console.log(socketMap)
+    }
+
   socket.connect();
   
   socket.on("connect", onConnect);
+  socket.on("getOnlineUsers", fetchOnlineUsers);
   socket.on("disconnect",onDisconnect);
 
   return () =>{
     socket.off('connect', onConnect);
+    socket.off("getOnlineUsers", fetchOnlineUsers);
     socket.off('disconnect', onDisconnect);
   }
-
-
 }, [authUser]);
 
   
@@ -74,15 +81,16 @@ useEffect(() => {
 
 
   return <>
-        <AuthContext.Provider value = {{loggedIn, setLoggedIn, checkingAuth, authUser, showPlaceholder, setShowPlaceholder, selectedChat, setSelectedChat, socket, isConnected}}>
+        <AuthContext.Provider value = {{loggedIn, setLoggedIn, checkingAuth, authUser, showPlaceholder, setShowPlaceholder, selectedChat, setSelectedChat, socket, isConnected, userSocketMap}}>
             <Routes>
             <Route path = "/" element = {loggedIn ? <Navigate to = "/chat"/> : <SignupPage />}></Route>
             <Route path = "/login" element = {loggedIn ? <Navigate to = "/chat"/> : <LoginPage />}></Route>
             <Route path = "/forgot-password" element = {<ForgotPassword/>}></Route>
             <Route path = "*" element = {<NotFoundPage/>}/>
             <Route element = {<ProtectedRoute/>}>
-                  <Route path = "/chat" element = {<ChatPage />}></Route>
-                  <Route path = "/profile" element = {<ProfilePage />}></Route>
+                    {/* add key so component remounts on navigation, to update socket map */}
+                  <Route path="/chat" element={<ChatPage key={location.pathname} />} />
+                  <Route path="/profile" element={<ProfilePage key={location.pathname} />} />
             </Route>
         </Routes>
         </AuthContext.Provider>

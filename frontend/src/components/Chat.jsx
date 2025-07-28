@@ -7,7 +7,9 @@ import { getMessages } from "../utils/api.js";
 export default function Chat(props){
      const [messages, setMessages] = useState([]);
      const [currentMessage, setCurrentMessage] = useState("");
-     const {authUser, setShowPlaceholder, selectedChat, socket} = useContext(AuthContext);
+     const {authUser, setShowPlaceholder, selectedChat, socket, isConnected, userSocketMap} = useContext(AuthContext);
+
+     const isOnline = userSocketMap ? selectedChat.contactId in userSocketMap: false
 
       useEffect(() =>{
           const fetchMessages = async () =>{
@@ -19,8 +21,11 @@ export default function Chat(props){
 
       useEffect(() =>{
         function onReceiveMessage(message){
-            setMessages(prevMessages => [...prevMessages, message]);
-            console.log(message);
+            const isFromCurrentChat = message.senderid === selectedChat.contactId || message.receiverid === selectedChat?.contactId;
+
+            if(isFromCurrentChat){
+                setMessages(prevMessages => [...prevMessages, message]);
+            }
         }
 
         socket.on("receive-message", onReceiveMessage);
@@ -28,7 +33,7 @@ export default function Chat(props){
         return () =>{
             socket.off("receive-message", onReceiveMessage);
         }
-      }, [])
+      }, [selectedChat?.contactId])
 
 
       useEffect(() => {
@@ -45,7 +50,7 @@ export default function Chat(props){
 
             <div className="chat-info">
                 <h3 className="contact-name">{props.name}</h3>
-                <p className="status">Online</p>
+                <p className= {`status ${isOnline && "online"}`}>{isOnline ? "Online" : "Offline"}</p>
             </div>
 
             <div className="action-buttons">
@@ -70,7 +75,9 @@ export default function Chat(props){
             <button>Photo</button>
             <button onClick= {
                 () =>{
-                    if (currentMessage.trim() === "") return;
+                    if (!isConnected || currentMessage.trim() === ""){
+                        return;
+                    }
 
                     const messageToSend = {
                         senderid:authUser.id,

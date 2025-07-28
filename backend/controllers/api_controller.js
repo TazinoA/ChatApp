@@ -1,26 +1,5 @@
 import { pool } from "../lib/db.js";
 
-export async function sendMessage(req, res) {
-  const {id:senderid} = req.user;
-  const { receiverid, content } = req.body;
-
-  if (!senderid || !receiverid || !content) {
-    return res.status(400).json({ message: "All fields required" });
-  }
-
-  try {
-    await pool.query(
-      `INSERT INTO messages (senderid, receiverid, content) VALUES ($1, $2, $3)`,
-      [senderid, receiverid, content]
-    );
-
-    res.status(200).json({ message: "Successfully sent message" });
-  } catch (e) {
-    res.status(500).json({ message: "Internal server error" });
-  }
-}
-
-
 export async function updateProfilePic(req, res){
     const {profilePic} = req.body;
     const {userId} = req.user.id;

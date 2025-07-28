@@ -6,7 +6,7 @@ import AuthContext from "../utils/AuthContext.js";
 import { updateProfilePic } from "../utils/api.js";
 
 export default function ProfilePage(){
-    const {authUser} = useContext(AuthContext);
+    const {authUser, isConnected} = useContext(AuthContext);
     const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
     const [selectedImg, setSelectedImg] = useState(null);
 
@@ -70,7 +70,7 @@ export default function ProfilePage(){
                 <h4>Account information</h4>
                 <p>Member since: <span>{authUser.date_joined.split("T")[0]}</span></p>
                 <hr/>
-                <p>Account status: <span>Active</span></p>
+                <p>Account status: <span>{isConnected ? "Active" : "Inactive"}</span></p>
             </div>
             
         </div>

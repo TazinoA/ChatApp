@@ -71,6 +71,8 @@ export async function verifyToken(){
 
 
 export async function logOut(){
+    localStorage.removeItem("selectedChat");
+    
     return await api.post("/auth/logout")
     .then(response => response)
     .catch(err => err)

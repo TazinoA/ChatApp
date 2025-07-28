@@ -19,7 +19,6 @@ function NavBar(){
                     await logOut();
                     setLoggedIn(false);
                     socket.disconnect();
-                    localStorage.removeItem("selectedChat");
                     setSelectedChat(null);
                     setShowPlaceholder(true);
                     navigate("/login");

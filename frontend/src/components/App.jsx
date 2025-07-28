@@ -43,7 +43,7 @@ useEffect(() =>{
 
   function onConnect() {
       setIsConnected(true);
-      socket.emit("register", authUser.id)
+      socket.emit("register", authUser.id);
     }
 
     function onDisconnect() {
@@ -74,7 +74,7 @@ useEffect(() => {
 
 
   return <>
-        <AuthContext.Provider value = {{loggedIn, setLoggedIn, checkingAuth, authUser, showPlaceholder, setShowPlaceholder, selectedChat, setSelectedChat, socket}}>
+        <AuthContext.Provider value = {{loggedIn, setLoggedIn, checkingAuth, authUser, showPlaceholder, setShowPlaceholder, selectedChat, setSelectedChat, socket, isConnected}}>
             <Routes>
             <Route path = "/" element = {loggedIn ? <Navigate to = "/chat"/> : <SignupPage />}></Route>
             <Route path = "/login" element = {loggedIn ? <Navigate to = "/chat"/> : <LoginPage />}></Route>

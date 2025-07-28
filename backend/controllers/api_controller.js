@@ -1,7 +1,8 @@
 import { pool } from "../lib/db.js";
 
 export async function sendMessage(req, res) {
-  const { senderid, receiverid, content } = req.body;
+  const {id:senderid} = req.user;
+  const { receiverid, content } = req.body;
 
   if (!senderid || !receiverid || !content) {
     return res.status(400).json({ message: "All fields required" });

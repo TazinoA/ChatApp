@@ -2,7 +2,7 @@ import { useContext } from "react";
 import AuthContext from "../utils/AuthContext";
 
 export default function Contact(props) {
-    const {setShowPlaceholder, setSelectedChat} = useContext(AuthContext);
+    const {setShowPlaceholder, setSelectedChat, isConnected} = useContext(AuthContext);
 
   return (
     <div className="contact" onClick = {() => {
@@ -17,7 +17,7 @@ export default function Contact(props) {
 
       <div className="contact-info">
         <h3 className="contact-name">{props.name}</h3>
-        <p className="status">Online</p>
+        <p className="status">{isConnected ? "Online" : "Offline"}</p>
       </div>
     </div>
   );

@@ -17,9 +17,3 @@ export async function getContacts() {
     .then(response => response.data.contacts)
     .catch(error => error)
 }
-
-export async function sendMessage(message){
-    return await api.post("/api/send-message", message)
-    .then(response => response)
-    .catch(error => error)
-}

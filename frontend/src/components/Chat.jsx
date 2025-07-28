@@ -2,7 +2,7 @@ import {createMessage} from "./Message.jsx";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../utils/AuthContext";
 import { getMessages } from "../utils/api.js";
-import { sendMessage } from "../utils/api.js";
+
 
 export default function Chat(props){
      const [messages, setMessages] = useState([]);
@@ -18,9 +18,9 @@ export default function Chat(props){
       },[selectedChat])
 
       useEffect(() =>{
-
         function onReceiveMessage(message){
             setMessages(prevMessages => [...prevMessages, message]);
+            console.log(message);
         }
 
         socket.on("receive-message", onReceiveMessage);
@@ -50,7 +50,7 @@ export default function Chat(props){
 
             <div className="action-buttons">
                 <button className="back-btn" onClick = {() => {
-                    setShowPlaceholder(true)
+                    setShowPlaceholder(true);
                     localStorage.setItem("selectedChat", JSON.stringify({placeholder:true}))
                     }}><img src = "https://cdn-icons-png.flaticon.com/128/3114/3114883.png"/></button>
                 {/* <button className="chat-settings"><img src = "https://cdn-icons-png.flaticon.com/128/1828/1828805.png"/></button> */}
@@ -79,8 +79,6 @@ export default function Chat(props){
                         timestamp: Date.now()
                     }
                     socket.emit("send-message", messageToSend);
-
-                    sendMessage(messageToSend);
 
                     setCurrentMessage("");
                 }

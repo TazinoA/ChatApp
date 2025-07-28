@@ -2,7 +2,7 @@ import { pool } from "../lib/db.js";
 
 export async function updateProfilePic(req, res){
     const {profilePic} = req.body;
-    const {userId} = req.user.id;
+    const {id:userId} = req.user;
 
     try{
       await pool.query(`UPDATE users SET profile_pic = $1 WHERE id = $2`, [profilePic, userId]);

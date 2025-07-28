@@ -24,8 +24,10 @@ export default function ProfilePage(){
       const base64Image = reader.result;
       setSelectedImg(base64Image);
       await updateProfilePic({ profilePic: base64Image });
+      console.log(base64Image)
     };
     setIsUpdatingProfile(false);
+    console.log(selectedImg, authUser)
   };
 
     return <>
@@ -44,6 +46,7 @@ export default function ProfilePage(){
                 </label>
                 <input
                     type="file"
+                    name = "avatar-upload"
                     id="avatar-upload"
                     className="hidden"
                     accept="image/*"

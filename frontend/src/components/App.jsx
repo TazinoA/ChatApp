@@ -4,7 +4,7 @@ import LoginPage from "../pages/LoginPage.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import ChatPage from "../pages/ChatPage.jsx";
 import ProfilePage from "../pages/ProfilePage.jsx";
-import NotFoundPage from "../pages/NotFound.jsx";
+// import NotFoundPage from "../pages/NotFound.jsx";
 import ForgotPassword from "../pages/ForgotPassword.jsx";
 import { useState, useEffect } from "react";
 import AuthContext from "../utils/AuthContext.js";
@@ -86,7 +86,7 @@ useEffect(() => {
             <Route path = "/" element = {loggedIn ? <Navigate to = "/chat"/> : <SignupPage />}></Route>
             <Route path = "/login" element = {loggedIn ? <Navigate to = "/chat"/> : <LoginPage />}></Route>
             <Route path = "/forgot-password" element = {<ForgotPassword/>}></Route>
-            <Route path = "*" element = {<NotFoundPage/>}/>
+            {/* <Route path = "*" element = {<NotFoundPage/>}/> */}
             <Route element = {<ProtectedRoute/>}>
                     {/* add key so component remounts on navigation, to update socket map */}
                   <Route path="/chat" element={<ChatPage key={location.pathname} />} />

@@ -2,12 +2,13 @@ import { useState, useContext, useEffect } from "react";
 import { login } from "../utils/auth_handler";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../utils/AuthContext";
-import { validateInput } from "../utils/auth_handler";
+import { validateInput, googleSignupOrLogin } from "../utils/auth_handler";
 import Loading from "../components/Loading";
+import { GoogleLogin } from "@react-oauth/google";
 import "../styles/login.css";
 
 function LoginPage(){
-    const { loggedIn,setLoggedIn, checkingAuth} = useContext(AuthContext);
+    const {setLoggedIn, checkingAuth} = useContext(AuthContext);
     const [email,setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [submitError, setSubmitError] = useState("");
@@ -39,6 +40,21 @@ function LoginPage(){
             navigate("/chat");
         }else{
             setSubmitError(result.message);
+        }
+    }
+
+   async function handleGoogleOauth(credentialsResponse){
+         setLoading(true);
+
+        const result = await googleSignupOrLogin(credentialsResponse);
+
+        setLoading(false);
+
+        if(result.status === 200){
+            setLoggedIn(true);
+            navigate("/chat");
+        }else{
+            setSubmitError(result.data.message);
         }
     }
 
@@ -81,7 +97,7 @@ function LoginPage(){
                
                 <div className = "password">
                     <label htmlFor = "password">Password</label>
-                    <a className = "forgot-password" href = "/forgot-password">Forgot Password?</a>
+                    {/* <a className = "forgot-password" href = "/forgot-password">Forgot Password?</a> */}
                 </div>
 
                 <div className="password-input-container">
@@ -107,12 +123,14 @@ function LoginPage(){
 
                 <div className="continue-with">
                     <span></span>
-                    <p>OR CONTINUE WITH</p>
+                    <p>OR</p>
                     <span></span>
                 </div>
 
                 <div className="alt-sign-in">
-                    <button className="google"> <img src = "https://www.gstatic.com/marketing-cms/assets/images/ef/8c/be724dfe44f88ea9f229c060dd0d/chrome-dino.webp=n-w96-h103-fcrop64=1,00000980fffff700-rw"/>  Google</button>
+                    <GoogleLogin onSuccess={handleGoogleOauth}
+                     onError={ () => {console.log("Login Failed")}}>
+                    </GoogleLogin>
                 </div>
 
                 <p className="has-account">Don't have an account? <a href = "/">Sign up</a></p>

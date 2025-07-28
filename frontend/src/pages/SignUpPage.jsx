@@ -1,12 +1,13 @@
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { signUp, validateInput } from "../utils/auth_handler";
+import { signUp, validateInput, googleSignupOrLogin } from "../utils/auth_handler";
 import AuthContext from "../utils/AuthContext";
 import Loading from "../components/Loading";
+import { GoogleLogin } from "@react-oauth/google";
 import "../styles/signup.css";
 
 function SignUpPage() {
-    const { loggedIn, setLoggedIn, checkingAuth } = useContext(AuthContext);
+    const {setLoggedIn, checkingAuth } = useContext(AuthContext);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -46,6 +47,22 @@ function SignUpPage() {
             setSubmitError(result.message);
         }
     };
+
+    
+   async function handleGoogleOauth(credentialsResponse){
+         setLoading(true);
+
+        const result = await googleSignupOrLogin(credentialsResponse);
+
+        setLoading(false);
+
+        if(result.status === 200){
+            setLoggedIn(true);
+            navigate("/chat");
+        }else{
+            setSubmitError(result.data.message);
+        }
+    }
 
     return (
         <>
@@ -200,14 +217,14 @@ function SignUpPage() {
 
                 <div className="continue-with">
                     <span></span>
-                    <p>OR CONTINUE WITH</p>
+                    <p>OR</p>
                     <span></span>
                 </div>
 
                 <div className="alt-sign-in">
-                    <button className="google">
-                        <img src="https://www.gstatic.com/marketing-cms/assets/images/ef/8c/be724dfe44f88ea9f229c060dd0d/chrome-dino.webp=n-w96-h103-fcrop64=1,00000980fffff700-rw" alt="Google logo" /> Google
-                    </button>
+                    <GoogleLogin onSuccess={handleGoogleOauth}
+                     onError={ () => {console.log("Login Failed")}}>
+                    </GoogleLogin>
                 </div>
 
                 <p className="has-account">Already have an account? <a href="/login">Sign in</a></p>

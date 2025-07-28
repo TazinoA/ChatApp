@@ -91,6 +91,43 @@ async function login(req, res) {
   }
 }
 
+
+async function googleSignupOrLogin(req, res) {
+  const { email, name, email_verified } = req.body;
+
+  if (!email || !name || !email_verified) {
+    return res.status(400).json({ message: "Invalid Google user information" });
+  }
+
+  try {
+    let userResult = await pool.query(`SELECT id, email FROM users WHERE email = $1`, [email]);
+
+    let user;
+    if (userResult.rows.length === 0) {
+      // 3. Create user (no password hash for Google users)
+      const insertResult = await pool.query(
+        `INSERT INTO users(name, email, password_hash) VALUES($1, $2, $3) RETURNING id, email`,
+        [titleCase(name), email, null]
+      );
+      user = insertResult.rows[0];
+    } else {
+      user = userResult.rows[0];
+    }
+
+    const token = generateToken({ id: user.id, email: user.email }, res);
+
+    return res.status(200).json({ access_token: token });
+  } catch (e) {
+    console.error("Google signup/login error:", e);
+    return res.status(500).json({
+      message: "There was an error logging you in with Google.",
+      error: e.message,
+    });
+  }
+}
+
+
+
 async function logout(req, res){
   res.clearCookie("accessToken",{
         httpOnly: true,
@@ -109,4 +146,4 @@ function titleCase(str) {
     .join(' ');                  // Join back with a single space
 }
 
-export { signup, login, logout };
+export { signup, login, logout, googleSignupOrLogin};

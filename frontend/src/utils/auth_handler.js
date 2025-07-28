@@ -1,4 +1,5 @@
 import axios from "axios";
+import {jwtDecode} from "jwt-decode";
 
 export const api = axios.create({
     baseURL:import.meta.env.VITE_API_BASE_URL,
@@ -76,4 +77,11 @@ export async function logOut(){
     return await api.post("/auth/logout")
     .then(response => response)
     .catch(err => err)
+}
+
+export async function googleSignupOrLogin(credentialResponse){
+   const user = jwtDecode(credentialResponse.credential);
+   return await api.post("/auth/google-oauth", user)
+   .then(response => response)
+   .catch(error => error);
 }

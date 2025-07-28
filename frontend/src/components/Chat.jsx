@@ -72,7 +72,7 @@ export default function Chat(props){
             onChange = {(e) => {
                 setCurrentMessage(e.target.value)
             }}></input>
-            <button>Photo</button>
+            {/* <button>Photo</button> */}
             <button onClick= {
                 () =>{
                     if (!isConnected || currentMessage.trim() === ""){

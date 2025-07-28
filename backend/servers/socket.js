@@ -18,14 +18,11 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-    console.log("connected");
     io.emit("getOnlineUsers", userSocketMap);
 
     socket.on("register", (userId) => {
         userSocketMap[userId] = socket.id;
         socket.userId = userId;
-        console.log(`User ${userId} registered with socket ${socket.id}`);
-        console.log(userSocketMap);
     });
 
    socket.on("send-message", async (msg) =>{
@@ -43,8 +40,6 @@ io.on("connection", (socket) => {
             const receiverSocketId = userSocketMap[receiverid];
             const senderSocketId = userSocketMap[senderid];
 
-            console.log(`Sender socket: ${senderSocketId}`);
-            console.log(`Receiver socket: ${receiverSocketId}`);
 
             if (receiverSocketId) {
                 io.to(receiverSocketId).emit("receive-message", { ...msg, id: messageId });

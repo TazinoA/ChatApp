@@ -44,6 +44,7 @@ async function signup(req, res) {
 
     return res.status(200).json({ access_token: token });
   } catch (e) {
+    console.log(e)
     return res.status(500).json({
       message: `There was an error signing you up, please try again later.`,
       error: e.message,
@@ -84,6 +85,7 @@ async function login(req, res) {
 
     return res.status(200).json({ access_token: token });
   } catch (e) {
+    console.log(e)
     return res.status(500).json({
       message: "There was an error logging you in, please try again later.",
       error: e.message,

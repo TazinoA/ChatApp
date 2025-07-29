@@ -5,6 +5,13 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { verifyToken } from "../lib/utils.js";
 import {io, app, server} from "./socket.js";
+import path from "path";
+import dotenv from "dotenv";
+
+dotenv.config();
+
+const port = process.env.PORT;
+const __dirname = path.resolve();
 
 app.use(cors({
     origin: "http://localhost:3000",
@@ -17,6 +24,14 @@ app.use(cookieParser());
 app.use("/auth", authRouter);
 app.use("/api",verifyToken, apiRouter);
 
-server.listen(5000);
+if(process.env.NODE_ENV ==="production"){
+    app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+    app.get("*", (req, res) => {
+        res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+    });
+}
+
+server.listen(port);
 
 

@@ -11,7 +11,7 @@ export default function generateToken(user, res){
     const token = jwt.sign(user, secret, {expiresIn:"7d"});
     res.cookie("accessToken", token, {
         httpOnly: true,
-        secure:false,
+        secure:true,
         sameSite:"Lax",
         maxAge: 1000 * 60 * 60 * 24,
     });

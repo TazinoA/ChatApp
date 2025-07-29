@@ -24,10 +24,8 @@ export default function ProfilePage(){
       const base64Image = reader.result;
       setSelectedImg(base64Image);
       await updateProfilePic({ profilePic: base64Image });
-      console.log(base64Image)
     };
     setIsUpdatingProfile(false);
-    console.log(selectedImg, authUser)
   };
 
     return <>

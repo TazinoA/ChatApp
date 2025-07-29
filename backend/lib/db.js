@@ -1,18 +1,19 @@
-import path from 'path';
+import { Pool } from 'pg';
 import dotenv from 'dotenv';
-import  {Pool} from 'pg';
 
-dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+dotenv.config(); // Loads from .env locally
 
-const password = process.env.DB_PASSWORD;
-const port = process.env.DB_PORT;
-const host = process.env.DB_HOST;
-const dbUser = process.env.DB_USER;
+const isProduction = process.env.NODE_ENV === 'production';
 
-export const pool = new Pool({
-  user: dbUser,
-  host: host,
-  database: 'ChatApp',
-  password: password,
-  port: port,
-});
+export const pool = isProduction
+  ? new Pool({
+      connectionString: process.env.DB_URL,
+      ssl: { rejectUnauthorized: false },
+    })
+  : new Pool({
+      user: process.env.DB_USER,
+      host: process.env.DB_HOST,
+      database: 'ChatApp',
+      password: process.env.DB_PASSWORD,
+      port: Number(process.env.DB_PORT),
+    });

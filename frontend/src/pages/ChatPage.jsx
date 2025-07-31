@@ -10,7 +10,7 @@ export default function ChatPage(){
     const {showPlaceholder,setShowPlaceholder, selectedChat} = useContext(AuthContext);
 
     useEffect(() => {
-          if(selectedChat){
+          if(selectedChat && !selectedChat.placeholder){
             setShowPlaceholder(false);
           }else{
             setShowPlaceholder(true);

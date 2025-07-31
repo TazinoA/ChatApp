@@ -18,7 +18,7 @@ function App(){
      const [checkingAuth, setCheckingAuth] = useState(true);
      const [authUser, setAuthUser] = useState(null);
      const [showPlaceholder, setShowPlaceholder] = useState(true);
-     const [selectedChat, setSelectedChat] = useState(null);
+     const [selectedChat, setSelectedChat] = useState({placeholder:true});
      const location = useLocation();
 
 
@@ -54,7 +54,6 @@ useEffect(() =>{
 
     function fetchOnlineUsers(socketMap){
         setUserSocketMap(socketMap);
-        //console.log(socketMap)
     }
 
   socket.connect();

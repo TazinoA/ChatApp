@@ -38,7 +38,7 @@ export default function ProfilePage(){
             <p>Your profile information</p>
 
             <div className="profile-img-container">
-                <img src= {selectedImg || authUser.profile_pic || "/avatar.png"} className="profile-img" alt="Profile" />
+                <img src= {selectedImg || authUser?.profile_pic || "/avatar.png"} className="profile-img" alt="Profile" />
                 <label htmlFor="avatar-upload" className="camera-icon" role="button" tabIndex={0}>
                     <Camera />
                 </label>

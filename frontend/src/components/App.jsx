@@ -52,22 +52,28 @@ useEffect(() =>{
       setIsConnected(false);
     }
 
-    function fetchOnlineUsers(socketMap){
-        setUserSocketMap(socketMap);
-    }
-
   socket.connect();
   
   socket.on("connect", onConnect);
-  socket.on("getOnlineUsers", fetchOnlineUsers);
   socket.on("disconnect",onDisconnect);
 
   return () =>{
     socket.off('connect', onConnect);
-    socket.off("getOnlineUsers", fetchOnlineUsers);
     socket.off('disconnect', onDisconnect);
   }
 }, [authUser]);
+
+useEffect(() => {
+  function fetchOnlineUsers(socketMap){
+        setUserSocketMap(socketMap);
+    }
+    socket.on("getOnlineUsers", fetchOnlineUsers);
+
+    return () =>{
+      socket.off("getOnlineUsers", fetchOnlineUsers);
+    }
+
+},)
 
   
 

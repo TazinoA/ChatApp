@@ -2,82 +2,85 @@
   min-height: calc(100vh - 4rem);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   background-color: var(--slate-100);
-  padding: 2rem;
+  padding: 1rem;
 }
 
 .profile-board {
   border: 1px solid var(--border);
   display: flex;
   flex-direction: column;
-  width: 40%;
-  min-width: 500px;
-  max-height: 90vh;
+  width: 100%;
+  max-width: 500px;
   align-items: center;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   background-color: var(--background);
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   overflow-y: auto;
+  padding: 1.5rem 1rem;
 }
 
 .profile-board > h3 {
-  margin-top: 1.5rem;
+  margin-top: 0;
   margin-bottom: 0.5rem;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 700;
   color: var(--foreground);
+  text-align: center;
 }
 
 .profile-board > p {
   margin-top: 0;
+  margin-bottom: 1.5rem;
   color: var(--muted-foreground);
   font-size: 0.875rem;
   text-align: center;
 }
 
-/* ===== PROFILE IMAGE CONTAINER ===== */
+/* Profile image container */
 .profile-img-container {
   position: relative;
   display: inline-block;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .profile-img {
-  height: 6rem;
-  width: 6rem;
+  height: 7rem;
+  width: 7rem;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid var(--border);
-  transition: border-color 0.2s ease;
+  border: 4px solid var(--border);
+  transition: all 0.3s ease;
 }
 
 .profile-img:hover {
   border-color: var(--primary);
+  transform: scale(1.02);
 }
 
-/* ===== CAMERA ICON POSITIONING ===== */
+/* Camera icon positioning */
 .camera-icon {
   position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 1.75rem;
-  height: 1.75rem;
+  bottom: 0.25rem;
+  right: 0.25rem;
+  width: 2rem;
+  height: 2rem;
   background-color: var(--primary);
-  border: 2px solid var(--background);
+  border: 3px solid var(--background);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .camera-icon:hover {
   background-color: var(--slate-700);
   transform: scale(1.1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
 .camera-icon:active {
@@ -96,19 +99,21 @@
   stroke-width: 2;
 }
 
-/* ===== HIDDEN FILE INPUT ===== */
+/* Hidden file input */
 input.hidden {
   display: none;
 }
 
+/* Form labels */
 .profile-board .label {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   gap: 0.5rem;
   align-self: flex-start;
-  margin-left: 2rem;
+  width: 100%;
   margin-bottom: 0.5rem;
+  padding: 0 1rem;
 }
 
 .profile-board .label > * {
@@ -116,122 +121,262 @@ input.hidden {
 }
 
 .profile-board .label > img {
-  height: 1rem;
-  width: 1rem;
+  height: 1.125rem;
+  width: 1.125rem;
 }
 
 .profile-board .label > label {
-  font-weight: 500;
+  font-weight: 600;
   font-size: 0.875rem;
   color: var(--foreground);
 }
 
+/* Form inputs */
 .profile-board > input {
-  width: 90%;
-  margin-bottom: 1rem;
-  margin-top: 0;
+  width: calc(100% - 2rem);
+  margin: 0 1rem 1.5rem 1rem;
   border: 2px solid var(--border);
-  border-radius: 0.375rem;
-  height: 2.5rem;
-  padding-left: 0.75rem;
+  border-radius: 0.5rem;
+  height: 3rem;
+  padding: 0 1rem;
   font-size: 0.875rem;
-  transition: border-color 0.2s ease;
+  transition: all 0.2s ease;
+  background-color: var(--slate-100);
 }
 
 .profile-board > input:focus {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  background-color: var(--background);
 }
 
+/* Account info section */
 .account-info {
   border: 2px solid var(--border);
-  width: 90%;
-  border-radius: 0.5rem;
-  margin-top: 1.5rem;
-  margin-bottom: 2rem;
+  width: calc(100% - 2rem);
+  border-radius: 0.75rem;
+  margin: 1rem;
   background-color: var(--primary-foreground);
 }
 
 .account-info > h4 {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  margin-left: 1rem;
-  font-size: 1rem;
+  margin: 1.25rem 1.25rem 1rem 1.25rem;
+  font-size: 1.125rem;
   font-weight: 600;
   color: var(--foreground);
 }
 
 .account-info > p {
   display: flex;
-  margin-left: 1rem;
-  margin-right: 1rem;
-  margin-bottom: 0.5rem;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 1.25rem 1rem 1.25rem;
   font-size: 0.875rem;
   color: var(--foreground);
+  line-height: 1.5;
 }
 
-.account-info>p:last-child{
-    margin-bottom: 1rem;
+.account-info > p:last-child {
+  margin-bottom: 1.25rem;
 }
 
 .account-info > p > span {
-  margin-left: auto;
   color: var(--muted-foreground);
   font-weight: 500;
+  text-align: right;
 }
 
 .account-info > hr {
   border: none;
   border-top: 1px solid var(--border);
-  margin: 0.5rem 1rem;
+  margin: 1rem 1.25rem;
 }
 
-
+/* Mobile optimizations */
 @media (max-width: 768px) {
+  .profile-container {
+    padding: 0.75rem;
+    align-items: stretch;
+  }
+
   .profile-board {
-    width: 90%;
-    min-width: unset;
-    margin: 1rem;
+    min-height: calc(100vh - 5rem);
+    border-radius: 0.5rem;
+    padding: 1.25rem 0.75rem;
   }
-  
+
+  .profile-board > h3 {
+    font-size: 1.5rem;
+  }
+
   .profile-img {
-    height: 5rem;
-    width: 5rem;
+    height: 6rem;
+    width: 6rem;
+    border-width: 3px;
   }
-  
+
   .camera-icon {
     width: 1.75rem;
     height: 1.75rem;
+    bottom: 0.125rem;
+    right: 0.125rem;
+    border-width: 2px;
   }
-  
+
   .camera-icon svg {
     width: 1rem;
     height: 1rem;
+  }
+
+  .profile-board .label {
+    padding: 0 0.75rem;
+  }
+
+  .profile-board > input {
+    width: calc(100% - 1.5rem);
+    margin: 0 0.75rem 1.25rem 0.75rem;
+    height: 2.75rem;
+    padding: 0 0.875rem;
+  }
+
+  .account-info {
+    width: calc(100% - 1.5rem);
+    margin: 0.75rem;
+  }
+
+  .account-info > h4 {
+    margin: 1rem 1rem 0.75rem 1rem;
+    font-size: 1rem;
+  }
+
+  .account-info > p {
+    margin: 0 1rem 0.75rem 1rem;
+    font-size: 0.8125rem;
+  }
+
+  .account-info > p:last-child {
+    margin-bottom: 1rem;
+  }
+
+  .account-info > hr {
+    margin: 0.75rem 1rem;
   }
 }
 
 @media (max-width: 480px) {
   .profile-container {
-    padding: 1rem;
+    padding: 0.5rem;
   }
-  
+
   .profile-board {
-    width: 95%;
+    min-height: calc(100vh - 4rem);
+    padding: 1rem 0.5rem;
+    border-radius: 0.375rem;
   }
-  
+
+  .profile-board > h3 {
+    font-size: 1.375rem;
+  }
+
+  .profile-board > p {
+    font-size: 0.8125rem;
+    margin-bottom: 1.25rem;
+  }
+
   .profile-img {
-    height: 4rem;
-    width: 4rem;
+    height: 5rem;
+    width: 5rem;
   }
-  
+
   .camera-icon {
     width: 1.5rem;
     height: 1.5rem;
   }
-  
+
   .camera-icon svg {
     width: 0.875rem;
     height: 0.875rem;
+  }
+
+  .profile-board .label {
+    padding: 0 0.5rem;
+  }
+
+  .profile-board .label > img {
+    height: 1rem;
+    width: 1rem;
+  }
+
+  .profile-board .label > label {
+    font-size: 0.8125rem;
+  }
+
+  .profile-board > input {
+    width: calc(100% - 1rem);
+    margin: 0 0.5rem 1rem 0.5rem;
+    height: 2.5rem;
+    padding: 0 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  .account-info {
+    width: calc(100% - 1rem);
+    margin: 0.5rem;
+  }
+
+  .account-info > h4 {
+    margin: 0.875rem 0.875rem 0.625rem 0.875rem;
+    font-size: 0.9375rem;
+  }
+
+  .account-info > p {
+    margin: 0 0.875rem 0.625rem 0.875rem;
+    font-size: 0.75rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .account-info > p > span {
+    text-align: left;
+    font-weight: 600;
+  }
+
+  .account-info > p:last-child {
+    margin-bottom: 0.875rem;
+  }
+
+  .account-info > hr {
+    margin: 0.625rem 0.875rem;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  .camera-icon {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .camera-icon svg {
+    width: 1.375rem;
+    height: 1.375rem;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .profile-img,
+  .camera-icon {
+    transition: none;
+  }
+
+  .profile-img:hover {
+    transform: none;
+  }
+
+  .camera-icon:hover {
+    transform: none;
   }
 }

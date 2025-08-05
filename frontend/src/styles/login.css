@@ -1,10 +1,11 @@
 .sign-in-container {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(to bottom right, var(--slate-100), var(--slate-200));
+  background: linear-gradient(135deg, var(--slate-100), var(--slate-200));
+  padding: 1rem;
 }
 
 .sign-in-board {
@@ -13,54 +14,57 @@
   flex-direction: column;
   align-items: center;
   border: 1px solid var(--border);
-  width: 30%;
-  min-width: 400px;
-  height: 80%;
-  border-radius: 0.5rem;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 400px;
+  min-height: 500px;
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   position: relative;
+  padding: 2rem 1.5rem;
 }
 
 .sign-in-board > img {
-  width: 3rem;
-  height: 3rem;
+  width: 3.5rem;
+  height: 3.5rem;
   border-radius: 50%;
-  margin-top: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .sign-in-board > h3 {
-  margin: 0;
-  font-size: 1.5rem;
+  margin: 0 0 0.5rem 0;
+  font-size: 1.75rem;
   font-weight: 700;
   color: var(--foreground);
+  text-align: center;
 }
 
 .sign-in-board .description {
-  margin-top: 0;
-  margin-bottom: 0.75rem;
+  margin: 0 0 1.5rem 0;
   color: var(--muted-foreground);
   text-align: center;
   font-size: 0.875rem;
+  line-height: 1.5;
 }
 
 .sign-in-board label {
   align-self: flex-start;
-  margin-left: 1.5rem;
   margin-bottom: 0.5rem;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 0.875rem;
   color: var(--foreground);
+  width: 100%;
 }
 
 .sign-in-board input {
-  width: 90%;
-  border-radius: 0.375rem;
-  height: 2.5rem;
+  width: 100%;
+  border-radius: 0.5rem;
+  height: 3rem;
   margin-bottom: 1rem;
-  border: 1px solid var(--border);
-  padding-left: 0.75rem;
+  border: 2px solid var(--border);
+  padding: 0 1rem;
   font-size: 0.875rem;
-  transition: border-color 0.2s ease;
+  transition: all 0.2s ease;
+  background-color: var(--background);
 }
 
 .sign-in-board input:focus {
@@ -75,7 +79,7 @@
 
 .password {
   display: flex;
-  width: 90%;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 0.5rem;
@@ -87,20 +91,22 @@
 
 .forgot-password {
   color: var(--primary);
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   text-decoration: none;
   cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease;
 }
 
 .forgot-password:hover {
   text-decoration: underline;
-  text-decoration-thickness: 1px;
+  background-color: rgba(59, 130, 246, 0.1);
 }
-
 
 .password-input-container {
   position: relative;
-  width: 90%;
+  width: 100%;
   display: flex;
   align-items: center;
 }
@@ -108,76 +114,262 @@
 .password-input {
   width: 100% !important;
   padding-right: 3rem !important;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .password-toggle {
   position: absolute;
-  right: 0.75rem;
-  top: 40%;
+  right: 1rem;
+  top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
   color: var(--muted-foreground);
-  border-radius: 0.25rem;
+  border-radius: 0.375rem;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1;
+  padding: 0.5rem;
+  height: 2.5rem;
+}
+
+.password-toggle:hover {
+  background-color: var(--slate-100);
+  color: var(--foreground);
 }
 
 .password-toggle img {
-  width: 1rem;
-  height: 1rem;
+  width: 1.125rem;
+  height: 1.125rem;
 }
 
 .sign-in-btn {
-  margin-top: 0.75rem;
-  width: 90%;
+  width: 100%;
   background-color: var(--foreground);
   color: white;
   border: none;
   border-radius: 0.5rem;
-  height: 2.75rem;
-  margin-bottom: 1rem;
-  font-weight: 500;
+  height: 3rem;
+  margin-top: 1.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 .sign-in-btn:hover {
   background-color: var(--slate-700);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.error-msg{
-  color: red;
-  height: 1.5rem;
-  font-size: small;
-  margin: 0;
+.sign-in-btn:active {
+  transform: translateY(0);
+}
+
+.error-msg {
+  color: #ef4444;
+  min-height: 1.5rem;
+  font-size: 0.8125rem;
+  margin: 0 0 1rem 0;
+  text-align: center;
+  font-weight: 500;
 }
 
 input.error:focus {
   outline: none;
-  border-color: red;
-  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
 }
 
 input.error {
-  outline: none;
-  border-color: red;
-  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+  border-color: #ef4444;
+  background-color: #fef2f2;
 }
 
+.continue-with {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 1rem;
+  color: var(--muted-foreground);
+  font-size: 0.8125rem;
+  margin: 1rem 0;
+}
 
+.continue-with > span {
+  display: inline-block;
+  background-color: var(--border);
+  height: 1px;
+  flex: 1;
+}
 
+.alt-sign-in {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.has-account {
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  text-align: center;
+  margin-top: auto;
+}
+
+.has-account > a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.has-account > a:hover {
+  text-decoration: underline;
+}
+
+/* Mobile optimizations */
 @media (max-width: 768px) {
-  .password-toggle {
-    right: 0.5rem;
+  .sign-in-container {
+    padding: 0.75rem;
+    align-items: stretch;
   }
-  
+
+  .sign-in-board {
+    max-width: none;
+    min-height: calc(100vh - 1.5rem);
+    padding: 1.5rem 1.25rem;
+    border-radius: 0.75rem;
+  }
+
+  .sign-in-board > img {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .sign-in-board > h3 {
+    font-size: 1.5rem;
+  }
+
+  .sign-in-board input {
+    height: 2.75rem;
+    padding: 0 0.875rem;
+  }
+
+  .password-input {
+    padding-right: 2.75rem !important;
+  }
+
+  .password-toggle {
+    right: 0.875rem;
+    padding: 0.375rem;
+    height: 2.5rem;
+  }
+
+  .password-toggle img {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .sign-in-btn {
+    height: 2.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sign-in-container {
+    padding: 0.5rem;
+  }
+
+  .sign-in-board {
+    padding: 1.25rem 1rem;
+    border-radius: 0.5rem;
+  }
+
+  .sign-in-board > img {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .sign-in-board > h3 {
+    font-size: 1.375rem;
+  }
+
+  .sign-in-board .description {
+    font-size: 0.8125rem;
+  }
+
+  .sign-in-board label {
+    font-size: 0.8125rem;
+  }
+
+  .sign-in-board input {
+    height: 2.5rem;
+    padding: 0 0.75rem;
+    font-size: 0.8125rem;
+  }
+
   .password-input {
     padding-right: 2.5rem !important;
+  }
+
+  .password-toggle {
+    right: 0.75rem;
+    padding: 0.25rem;
+    height: 2.5rem; /* Set a fixed height */
+  }
+
+  .password-toggle img {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+
+  .sign-in-btn {
+    height: 2.5rem;
+    font-size: 0.8125rem;
+  }
+
+  .forgot-password {
+    font-size: 0.75rem;
+  }
+
+  .continue-with {
+    font-size: 0.75rem;
+  }
+
+  .has-account {
+    font-size: 0.8125rem;
+  }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+  .sign-in-btn,
+  .password-toggle,
+  .forgot-password {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .sign-in-board input {
+    min-height: 44px;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+  .sign-in-btn,
+  .password-toggle,
+  .forgot-password {
+    transition: none;
+  }
+
+  .sign-in-btn:hover {
+    transform: none;
   }
 }

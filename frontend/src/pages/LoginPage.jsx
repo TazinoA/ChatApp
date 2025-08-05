@@ -111,7 +111,7 @@ function LoginPage(){
                     />
                     <button 
                         type="button"
-                        className="password-toggle"
+                        className="password-toggle login"
                         onClick={() => setShowPassword(prev => !prev)}
                     >
                         <img src = {showPassword ? "https://cdn-icons-png.flaticon.com/128/709/709612.png": "https://cdn-icons-png.flaticon.com/128/10898/10898993.png"}/>

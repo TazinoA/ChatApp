@@ -23,6 +23,7 @@ io.on("connection", (socket) => {
     socket.on("register", (userId) => {
         userSocketMap[userId] = socket.id;
         socket.userId = userId;
+        io.emit("getOnlineUsers", userSocketMap);
     });
 
    socket.on("send-message", async (msg) =>{

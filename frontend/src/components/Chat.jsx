@@ -1,5 +1,5 @@
 import {createMessage} from "./Message.jsx";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import AuthContext from "../utils/AuthContext";
 import { getMessages } from "../utils/api.js";
 
@@ -7,17 +7,64 @@ import { getMessages } from "../utils/api.js";
 export default function Chat(props){
      const [messages, setMessages] = useState([]);
      const [currentMessage, setCurrentMessage] = useState("");
+     const [nextCursor, setNextCursor] = useState(null);
+     const [hasMoreMessages, setHasMoreMessages] = useState(false);
+     const [loadingOlderMessages, setLoadingOlderMessages] = useState(false);
+     const messageContainerRef = useRef(null);
+     const shouldScrollToBottom = useRef(true);
      const {authUser, setShowPlaceholder, selectedChat, socket, isConnected, userSocketMap} = useContext(AuthContext);
 
      const isOnline = userSocketMap ? selectedChat.contactId in userSocketMap: false
 
       useEffect(() =>{
+          let cancelled = false;
+
           const fetchMessages = async () =>{
-            const messages = await getMessages(selectedChat.contactId);
-            setMessages(messages);
+            try {
+              const page = await getMessages(selectedChat.contactId);
+              if (cancelled) return;
+
+              setMessages(page.messages.reverse());
+              setNextCursor(page.nextCursor);
+              setHasMoreMessages(page.hasMore);
+              shouldScrollToBottom.current = true;
+            } catch (error) {
+              console.error("Unable to load messages:", error);
+            }
           }
           fetchMessages();
-      },[selectedChat])
+          return () => {
+            cancelled = true;
+          };
+      },[selectedChat.contactId])
+
+      const loadOlderMessages = async () => {
+        if (!hasMoreMessages || loadingOlderMessages || !nextCursor) return;
+
+        const container = messageContainerRef.current;
+        const previousScrollHeight = container?.scrollHeight ?? 0;
+        const previousScrollTop = container?.scrollTop ?? 0;
+        setLoadingOlderMessages(true);
+
+        try {
+          const page = await getMessages(selectedChat.contactId, nextCursor);
+          const olderMessages = page.messages.reverse();
+          shouldScrollToBottom.current = false;
+          setMessages((currentMessages) => [...olderMessages, ...currentMessages]);
+          setNextCursor(page.nextCursor);
+          setHasMoreMessages(page.hasMore);
+
+          requestAnimationFrame(() => {
+            if (container) {
+              container.scrollTop = previousScrollTop + container.scrollHeight - previousScrollHeight;
+            }
+          });
+        } catch (error) {
+          console.error("Unable to load older messages:", error);
+        } finally {
+          setLoadingOlderMessages(false);
+        }
+      };
 
       useEffect(() =>{
         function onReceiveMessage(message){
@@ -37,10 +84,11 @@ export default function Chat(props){
 
 
       useEffect(() => {
-            const container = document.querySelector(".message-container");
-            if (container) {
+            const container = messageContainerRef.current;
+            if (container && shouldScrollToBottom.current) {
                 container.scrollTop = container.scrollHeight;
             }
+            shouldScrollToBottom.current = true;
       }, [messages]);
 
     return <>
@@ -61,7 +109,16 @@ export default function Chat(props){
                 {/* <button className="chat-settings"><img src = "https://cdn-icons-png.flaticon.com/128/1828/1828805.png"/></button> */}
             </div>
         </header>
-        <div className="message-container">
+        <div
+          className="message-container"
+          ref={messageContainerRef}
+          onScroll={(event) => {
+            if (event.currentTarget.scrollTop <= 40) {
+              loadOlderMessages();
+            }
+          }}
+        >
+           {loadingOlderMessages && <p className="older-messages-loading">Loading older messages…</p>}
            {messages.length > 0 && authUser && selectedChat &&  messages.map(msg => createMessage(msg, authUser, selectedChat))}
         </div>
         <footer>

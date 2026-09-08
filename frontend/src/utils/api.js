@@ -6,10 +6,11 @@ export async function updateProfilePic(data){
     })
 }
 
-export async function getMessages(receiverId) {
-    return await api.get(`/api/get-messages/${receiverId}`)
-    .then(response => response.data.messages)
-    .catch(error => error)
+export async function getMessages(receiverId, before) {
+    return await api.get(`/api/get-messages/${receiverId}`, {
+        params: before ? { before } : undefined,
+    })
+    .then(response => response.data)
 }
 
 export async function getContacts() {

@@ -1,13 +1,13 @@
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { signUp, validateInput, googleSignupOrLogin } from "../utils/auth_handler";
+import { signUp, validateInput, googleSignupOrLogin, verifyToken } from "../utils/auth_handler";
 import AuthContext from "../utils/AuthContext";
 import Loading from "../components/Loading";
 import { GoogleLogin } from "@react-oauth/google";
 import "../styles/signup.css";
 
 function SignUpPage() {
-    const {setLoggedIn, checkingAuth } = useContext(AuthContext);
+    const {setLoggedIn, setAuthUser, checkingAuth } = useContext(AuthContext);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -41,6 +41,13 @@ function SignUpPage() {
         setLoading(false);
 
         if (result.success) {
+            const session = await verifyToken();
+            if (!session.isValid) {
+                setSubmitError("We couldn't start your session. Please try signing up again.");
+                return;
+            }
+
+            setAuthUser(session.user);
             setLoggedIn(true);
             navigate("/chat");
         } else {
@@ -57,6 +64,13 @@ function SignUpPage() {
         setLoading(false);
 
         if(result.status === 200){
+            const session = await verifyToken();
+            if (!session.isValid) {
+                setSubmitError("We couldn't start your session. Please try signing in again.");
+                return;
+            }
+
+            setAuthUser(session.user);
             setLoggedIn(true);
             navigate("/chat");
         }else{

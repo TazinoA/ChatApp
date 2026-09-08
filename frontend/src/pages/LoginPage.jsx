@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react";
-import { login } from "../utils/auth_handler";
+import { login, verifyToken } from "../utils/auth_handler";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../utils/AuthContext";
 import { validateInput, googleSignupOrLogin } from "../utils/auth_handler";
@@ -8,7 +8,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import "../styles/login.css";
 
 function LoginPage(){
-    const {setLoggedIn, checkingAuth} = useContext(AuthContext);
+    const {setLoggedIn, setAuthUser, checkingAuth} = useContext(AuthContext);
     const [email,setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [submitError, setSubmitError] = useState("");
@@ -36,6 +36,13 @@ function LoginPage(){
         setLoading(false);
 
         if(result.success){
+            const session = await verifyToken();
+            if (!session.isValid) {
+                setSubmitError("We couldn't start your session. Please try signing in again.");
+                return;
+            }
+
+            setAuthUser(session.user);
             setLoggedIn(true);
             navigate("/chat");
         }else{
@@ -51,6 +58,13 @@ function LoginPage(){
         setLoading(false);
 
         if(result.status === 200){
+            const session = await verifyToken();
+            if (!session.isValid) {
+                setSubmitError("We couldn't start your session. Please try signing in again.");
+                return;
+            }
+
+            setAuthUser(session.user);
             setLoggedIn(true);
             navigate("/chat");
         }else{

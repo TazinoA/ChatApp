@@ -86,7 +86,7 @@ useEffect(() => {
 
 
   return <>
-        <AuthContext.Provider value = {{loggedIn, setLoggedIn, checkingAuth, authUser, showPlaceholder, setShowPlaceholder, selectedChat, setSelectedChat, socket, isConnected, userSocketMap}}>
+        <AuthContext.Provider value = {{loggedIn, setLoggedIn, checkingAuth, authUser, setAuthUser, showPlaceholder, setShowPlaceholder, selectedChat, setSelectedChat, socket, isConnected, userSocketMap}}>
             <Routes>
             <Route path = "/" element = {loggedIn ? <Navigate to = "/chat"/> : <SignupPage />}></Route>
             <Route path = "/login" element = {loggedIn ? <Navigate to = "/chat"/> : <LoginPage />}></Route>

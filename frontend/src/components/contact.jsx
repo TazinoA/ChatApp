@@ -1,37 +1,54 @@
 import { useContext } from "react";
 import AuthContext from "../utils/AuthContext";
+import { formatLastMessageTime } from "../utils/chatHelpers";
 
-export default function Contact(props) {
-    const {setShowPlaceholder, setSelectedChat, userSocketMap} = useContext(AuthContext);
+export default function Contact({ contact }) {
+  const { setSelectedChat, onlineUserIds } = useContext(AuthContext);
 
-    const isOnline = userSocketMap ? props.contactId in userSocketMap: false
+  const contactId = contact.id;
+  const isOnline = Array.isArray(onlineUserIds)
+    ? onlineUserIds.includes(contactId)
+    : onlineUserIds instanceof Set
+    ? onlineUserIds.has(contactId)
+    : false;
+
+  const handleClick = () => {
+    const selected = {
+      contactId: contact.id,
+      name: contact.name,
+      profile_pic: contact.profile_pic || "/avatar.png",
+      email: contact.email,
+    };
+    setSelectedChat(selected);
+    localStorage.setItem("selectedChat", JSON.stringify(selected));
+  };
 
   return (
-    <div className="contact" onClick = {() => {
-      setShowPlaceholder(false);
-      setSelectedChat(props);
-      localStorage.setItem("selectedChat", JSON.stringify({
-        ...props,
-        placeholder:false
-      }));
-      }}>
-      <img className="avatar" src={props.profile_pic} alt={`${props.name}'s avatar`} />
-
-      <div className="contact-info">
-        <h3 className="contact-name">{props.name}</h3>
-        <p className= {`status ${isOnline && "online"}`}>{isOnline ? "Online" : "Offline"}</p>
+    <button type="button" className="contact-card-btn" onClick={handleClick}>
+      <div className="avatar-wrapper">
+        <img
+          className="avatar"
+          src={contact.profile_pic || "/avatar.png"}
+          alt={`${contact.name}'s avatar`}
+        />
+        <span className={`online-badge ${isOnline ? "active" : ""}`} />
       </div>
-    </div>
-  );
-}
 
-export function createContact(contact) {
-  return (
-    <Contact
-      key={contact.id}
-      contactId = {contact.id}
-      profile_pic={contact.profile_pic || "/avatar.png"}
-      name={contact.name}
-    />
+      <div className="contact-details">
+        <div className="contact-top">
+          <h3 className="contact-name">{contact.name}</h3>
+          {contact.last_message_time && (
+            <span className="last-msg-time">
+              {formatLastMessageTime(contact.last_message_time)}
+            </span>
+          )}
+        </div>
+        <div className="contact-bottom">
+          <p className="last-msg-text">
+            {contact.last_message ? contact.last_message : "No messages yet"}
+          </p>
+        </div>
+      </div>
+    </button>
   );
 }

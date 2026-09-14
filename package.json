@@ -1,10 +1,13 @@
 {
   "name": "chatapp",
   "version": "1.0.0",
-  "main": "backend/server.js",
+  "main": "backend/servers/server.js",
   "scripts": {
-    "build":"npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
-    "start":"npm run start --prefix backend"
+    "build": "npm run build --prefix frontend",
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "ci": "npm ci --prefix backend && npm ci --prefix frontend",
+    "start": "npm run start --prefix backend",
+    "test": "npm run test --prefix backend"
   },
   "repository": {
     "type": "git",
@@ -17,5 +20,5 @@
     "url": "https://github.com/TazinoA/ChatApp/issues"
   },
   "homepage": "https://github.com/TazinoA/ChatApp#readme",
-  "description": ""
+  "description": "Full-stack real-time chat application with Socket.IO, Express, React, and PostgreSQL"
 }

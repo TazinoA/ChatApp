@@ -1,105 +1,139 @@
-import {Route, Routes, Navigate, useLocation} from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import SignupPage from "../pages/SignUpPage.jsx";
 import LoginPage from "../pages/LoginPage.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import ChatPage from "../pages/ChatPage.jsx";
 import ProfilePage from "../pages/ProfilePage.jsx";
-// import NotFoundPage from "../pages/NotFound.jsx";
 import ForgotPassword from "../pages/ForgotPassword.jsx";
 import { useState, useEffect } from "react";
 import AuthContext from "../utils/AuthContext.js";
 import { verifyToken } from "../utils/auth_handler.js";
 import socket from "../utils/socket.js";
 
-function App(){
-     const [isConnected, setIsConnected] = useState(socket.connected);
-     const [userSocketMap, setUserSocketMap] = useState(null);
-     const [loggedIn, setLoggedIn] = useState(false);
-     const [checkingAuth, setCheckingAuth] = useState(true);
-     const [authUser, setAuthUser] = useState(null);
-     const [showPlaceholder, setShowPlaceholder] = useState(true);
-     const [selectedChat, setSelectedChat] = useState({placeholder:true});
-     const location = useLocation();
-
-
-     useEffect(() => {
-    const checkToken = async () => {
-    let result;
+function App() {
+  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [onlineUserIds, setOnlineUserIds] = useState([]);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [authUser, setAuthUser] = useState(null);
+  const [selectedChat, setSelectedChat] = useState(() => {
     try {
-      result = await verifyToken();
-      setLoggedIn(result.isValid);
-    } catch (err) {
-      console.error("Token verification failed:", err);
-      setLoggedIn(false);
-    }finally{
-      setCheckingAuth(false);
-      setAuthUser(result.user);
+      const stored = localStorage.getItem("selectedChat");
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed && !parsed.placeholder && parsed.contactId) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      console.error("Error reading stored chat:", e);
     }
+    return null;
+  });
+
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem("theme") || "dark";
+  });
+
+  const location = useLocation();
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
   };
-  checkToken();
-}, []);
 
+  useEffect(() => {
+    const checkToken = async () => {
+      try {
+        const result = await verifyToken();
+        if (result && result.isValid) {
+          setLoggedIn(true);
+          setAuthUser(result.user);
+        } else {
+          setLoggedIn(false);
+          setAuthUser(null);
+        }
+      } catch (err) {
+        console.error("Token verification failed:", err);
+        setLoggedIn(false);
+        setAuthUser(null);
+      } finally {
+        setCheckingAuth(false);
+      }
+    };
+    checkToken();
+  }, []);
 
-useEffect(() =>{
-  if(!authUser) return;
+  useEffect(() => {
+    if (!authUser) {
+      if (socket.connected) {
+        socket.disconnect();
+      }
+      return;
+    }
 
-  function onConnect() {
+    function onConnect() {
       setIsConnected(true);
-      socket.emit("register", authUser.id);
     }
 
     function onDisconnect() {
       setIsConnected(false);
     }
 
-  socket.connect();
-  
-  socket.on("connect", onConnect);
-  socket.on("disconnect",onDisconnect);
-
-  return () =>{
-    socket.off('connect', onConnect);
-    socket.off('disconnect', onDisconnect);
-  }
-}, [authUser]);
-
-useEffect(() => {
-  function fetchOnlineUsers(socketMap){
-        setUserSocketMap(socketMap);
-    }
-    socket.on("getOnlineUsers", fetchOnlineUsers);
-
-    return () =>{
-      socket.off("getOnlineUsers", fetchOnlineUsers);
+    function onGetOnlineUsers(userMapOrArray) {
+      if (Array.isArray(userMapOrArray)) {
+        setOnlineUserIds(userMapOrArray);
+      } else if (userMapOrArray && typeof userMapOrArray === "object") {
+        setOnlineUserIds(Object.keys(userMapOrArray).map(Number));
+      } else {
+        setOnlineUserIds([]);
+      }
     }
 
-},)
+    socket.connect();
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
+    socket.on("getOnlineUsers", onGetOnlineUsers);
 
-  
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
+      socket.off("getOnlineUsers", onGetOnlineUsers);
+    };
+  }, [authUser]);
 
-useEffect(() => {
-  const storedChat = localStorage.getItem("selectedChat");
-  if (storedChat) {
-    setSelectedChat(JSON.parse(storedChat));
-  }
-}, []);
-
-
-  return <>
-        <AuthContext.Provider value = {{loggedIn, setLoggedIn, checkingAuth, authUser, setAuthUser, showPlaceholder, setShowPlaceholder, selectedChat, setSelectedChat, socket, isConnected, userSocketMap}}>
-            <Routes>
-            <Route path = "/" element = {loggedIn ? <Navigate to = "/chat"/> : <SignupPage />}></Route>
-            <Route path = "/login" element = {loggedIn ? <Navigate to = "/chat"/> : <LoginPage />}></Route>
-            <Route path = "/forgot-password" element = {<ForgotPassword/>}></Route>
-            {/* <Route path = "*" element = {<NotFoundPage/>}/> */}
-            <Route element = {<ProtectedRoute/>}>
-                    {/* add key so component remounts on navigation, to update socket map */}
-                  <Route path="/chat" element={<ChatPage key={location.pathname} />} />
-                  <Route path="/profile" element={<ProfilePage key={location.pathname} />} />
-            </Route>
-        </Routes>
-        </AuthContext.Provider>
-      </>
+  return (
+    <AuthContext.Provider
+      value={{
+        loggedIn,
+        setLoggedIn,
+        checkingAuth,
+        authUser,
+        setAuthUser,
+        selectedChat,
+        setSelectedChat,
+        socket,
+        isConnected,
+        onlineUserIds,
+        theme,
+        toggleTheme,
+      }}
+    >
+      <Routes>
+        <Route path="/" element={loggedIn ? <Navigate to="/chat" /> : <SignupPage />} />
+        <Route path="/login" element={loggedIn ? <Navigate to="/chat" /> : <LoginPage />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/chat" element={<ChatPage key={location.pathname} />} />
+          <Route path="/profile" element={<ProfilePage key={location.pathname} />} />
+        </Route>
+      </Routes>
+    </AuthContext.Provider>
+  );
 }
 
 export default App;

@@ -1,153 +1,217 @@
-import {createMessage} from "./Message.jsx";
 import { useContext, useEffect, useRef, useState } from "react";
 import AuthContext from "../utils/AuthContext";
 import { getMessages } from "../utils/api.js";
+import Message from "./Message.jsx";
+import { ArrowLeft, Send, Loader2 } from "lucide-react";
 
+export default function Chat() {
+  const [messages, setMessages] = useState([]);
+  const [currentMessage, setCurrentMessage] = useState("");
+  const [nextCursor, setNextCursor] = useState(null);
+  const [hasMoreMessages, setHasMoreMessages] = useState(false);
+  const [loadingOlderMessages, setLoadingOlderMessages] = useState(false);
+  const [sendError, setSendError] = useState("");
 
-export default function Chat(props){
-     const [messages, setMessages] = useState([]);
-     const [currentMessage, setCurrentMessage] = useState("");
-     const [nextCursor, setNextCursor] = useState(null);
-     const [hasMoreMessages, setHasMoreMessages] = useState(false);
-     const [loadingOlderMessages, setLoadingOlderMessages] = useState(false);
-     const messageContainerRef = useRef(null);
-     const shouldScrollToBottom = useRef(true);
-     const {authUser, setShowPlaceholder, selectedChat, socket, isConnected, userSocketMap} = useContext(AuthContext);
+  const messageContainerRef = useRef(null);
+  const isNearBottomRef = useRef(true);
 
-     const isOnline = userSocketMap ? selectedChat.contactId in userSocketMap: false
+  const { authUser, selectedChat, setSelectedChat, socket, isConnected, onlineUserIds } =
+    useContext(AuthContext);
 
-      useEffect(() =>{
-          let cancelled = false;
+  const contactId = selectedChat?.contactId;
+  const isOnline = Array.isArray(onlineUserIds)
+    ? onlineUserIds.includes(contactId)
+    : onlineUserIds instanceof Set
+    ? onlineUserIds.has(contactId)
+    : false;
 
-          const fetchMessages = async () =>{
-            try {
-              const page = await getMessages(selectedChat.contactId);
-              if (cancelled) return;
+  useEffect(() => {
+    let cancelled = false;
 
-              setMessages(page.messages.reverse());
-              setNextCursor(page.nextCursor);
-              setHasMoreMessages(page.hasMore);
-              shouldScrollToBottom.current = true;
-            } catch (error) {
-              console.error("Unable to load messages:", error);
-            }
+    const fetchInitialMessages = async () => {
+      if (!contactId) return;
+      setSendError("");
+      try {
+        const page = await getMessages(contactId);
+        if (cancelled) return;
+
+        setMessages(page.messages || []);
+        setNextCursor(page.nextCursor || null);
+        setHasMoreMessages(!!page.hasMore);
+
+        // On initial load, scroll to bottom
+        requestAnimationFrame(() => {
+          if (messageContainerRef.current) {
+            messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
           }
-          fetchMessages();
-          return () => {
-            cancelled = true;
-          };
-      },[selectedChat.contactId])
+        });
+      } catch (error) {
+        console.error("Unable to load messages:", error);
+      }
+    };
 
-      const loadOlderMessages = async () => {
-        if (!hasMoreMessages || loadingOlderMessages || !nextCursor) return;
+    fetchInitialMessages();
+    return () => {
+      cancelled = true;
+    };
+  }, [contactId]);
 
-        const container = messageContainerRef.current;
-        const previousScrollHeight = container?.scrollHeight ?? 0;
-        const previousScrollTop = container?.scrollTop ?? 0;
-        setLoadingOlderMessages(true);
+  const loadOlderMessages = async () => {
+    if (!hasMoreMessages || loadingOlderMessages || !nextCursor || !contactId) return;
 
-        try {
-          const page = await getMessages(selectedChat.contactId, nextCursor);
-          const olderMessages = page.messages.reverse();
-          shouldScrollToBottom.current = false;
-          setMessages((currentMessages) => [...olderMessages, ...currentMessages]);
-          setNextCursor(page.nextCursor);
-          setHasMoreMessages(page.hasMore);
+    const container = messageContainerRef.current;
+    const previousScrollHeight = container?.scrollHeight ?? 0;
+    const previousScrollTop = container?.scrollTop ?? 0;
+    setLoadingOlderMessages(true);
 
+    try {
+      const page = await getMessages(contactId, nextCursor);
+      const olderMessages = page.messages || [];
+
+      setMessages((currentMessages) => [...olderMessages, ...currentMessages]);
+      setNextCursor(page.nextCursor || null);
+      setHasMoreMessages(!!page.hasMore);
+
+      requestAnimationFrame(() => {
+        if (container) {
+          container.scrollTop = previousScrollTop + container.scrollHeight - previousScrollHeight;
+        }
+      });
+    } catch (error) {
+      console.error("Unable to load older messages:", error);
+    } finally {
+      setLoadingOlderMessages(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!socket || !contactId) return;
+
+    function onReceiveMessage(message) {
+      const isFromCurrentChat =
+        message.senderid === contactId || message.receiverid === contactId;
+
+      if (isFromCurrentChat) {
+        setMessages((prevMessages) => {
+          // Avoid duplicate messages
+          if (prevMessages.some((m) => m.id === message.id)) {
+            return prevMessages;
+          }
+          return [...prevMessages, message];
+        });
+
+        // Auto scroll if user is near bottom or is the sender
+        const isSentByMe = message.senderid === authUser?.id;
+        if (isSentByMe || isNearBottomRef.current) {
           requestAnimationFrame(() => {
-            if (container) {
-              container.scrollTop = previousScrollTop + container.scrollHeight - previousScrollHeight;
+            if (messageContainerRef.current) {
+              messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
             }
           });
-        } catch (error) {
-          console.error("Unable to load older messages:", error);
-        } finally {
-          setLoadingOlderMessages(false);
         }
-      };
+      }
+    }
 
-      useEffect(() =>{
-        function onReceiveMessage(message){
-            const isFromCurrentChat = message.senderid === selectedChat.contactId || message.receiverid === selectedChat?.contactId;
+    function onErrorMessage(err) {
+      setSendError(err.message || "Failed to send message");
+    }
 
-            if(isFromCurrentChat){
-                setMessages(prevMessages => [...prevMessages, message]);
-            }
-        }
+    socket.on("receive-message", onReceiveMessage);
+    socket.on("error-message", onErrorMessage);
 
-        socket.on("receive-message", onReceiveMessage);
+    return () => {
+      socket.off("receive-message", onReceiveMessage);
+      socket.off("error-message", onErrorMessage);
+    };
+  }, [socket, contactId, authUser?.id]);
 
-        return () =>{
-            socket.off("receive-message", onReceiveMessage);
-        }
-      }, [selectedChat?.contactId])
+  const handleScroll = (e) => {
+    const container = e.currentTarget;
+    const distanceToBottom = container.scrollHeight - container.scrollTop - container.clientHeight;
+    isNearBottomRef.current = distanceToBottom < 120;
 
+    if (container.scrollTop <= 30) {
+      loadOlderMessages();
+    }
+  };
 
-      useEffect(() => {
-            const container = messageContainerRef.current;
-            if (container && shouldScrollToBottom.current) {
-                container.scrollTop = container.scrollHeight;
-            }
-            shouldScrollToBottom.current = true;
-      }, [messages]);
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    setSendError("");
 
-    return <>
-        <div className="chat-container">
-            <header>
-            <img className="avatar" src={props.profile_pic} alt={`${props.name}'s avatar`} />
+    if (!isConnected) {
+      setSendError("Connecting to server...");
+      return;
+    }
 
-            <div className="chat-info">
-                <h3 className="contact-name">{props.name}</h3>
-                <p className= {`status ${isOnline && "online"}`}>{isOnline ? "Online" : "Offline"}</p>
-            </div>
+    if (!currentMessage.trim()) return;
 
-            <div className="action-buttons">
-                <button className="back-btn" onClick = {() => {
-                    setShowPlaceholder(true);
-                    localStorage.setItem("selectedChat", JSON.stringify({placeholder:true}))
-                    }}><img src = "https://cdn-icons-png.flaticon.com/128/3114/3114883.png"/></button>
-                {/* <button className="chat-settings"><img src = "https://cdn-icons-png.flaticon.com/128/1828/1828805.png"/></button> */}
-            </div>
-        </header>
-        <div
-          className="message-container"
-          ref={messageContainerRef}
-          onScroll={(event) => {
-            if (event.currentTarget.scrollTop <= 40) {
-              loadOlderMessages();
-            }
-          }}
-        >
-           {loadingOlderMessages && <p className="older-messages-loading">Loading older messages…</p>}
-           {messages.length > 0 && authUser && selectedChat &&  messages.map(msg => createMessage(msg, authUser, selectedChat))}
+    const messageToSend = {
+      receiverid: contactId,
+      content: currentMessage.trim(),
+    };
+
+    socket.emit("send-message", messageToSend);
+    setCurrentMessage("");
+  };
+
+  const handleBack = () => {
+    setSelectedChat(null);
+    localStorage.removeItem("selectedChat");
+  };
+
+  if (!selectedChat) return null;
+
+  return (
+    <div className="chat-container">
+      <header className="chat-header">
+        <button type="button" className="back-btn" onClick={handleBack} title="Back to chats">
+          <ArrowLeft />
+        </button>
+
+        <div className="avatar-wrapper">
+          <img
+            className="avatar"
+            src={selectedChat.profile_pic || "/avatar.png"}
+            alt={`${selectedChat.name}'s avatar`}
+          />
+          <span className={`online-badge ${isOnline ? "active" : ""}`} />
         </div>
-        <footer>
-            <input 
-            type = "text" 
-            placeholder="Type a message..." 
-            value = {currentMessage} 
-            onChange = {(e) => {
-                setCurrentMessage(e.target.value)
-            }}></input>
-            {/* <button>Photo</button> */}
-            <button onClick= {
-                () =>{
-                    if (!isConnected || currentMessage.trim() === ""){
-                        return;
-                    }
 
-                    const messageToSend = {
-                        senderid:authUser.id,
-                        receiverid:selectedChat.contactId,
-                        content:currentMessage,
-                        timestamp: Date.now()
-                    }
-                    socket.emit("send-message", messageToSend);
-
-                    setCurrentMessage("");
-                }
-            }>Send</button>
-        </footer>
+        <div className="chat-info">
+          <h3 className="contact-name">{selectedChat.name}</h3>
+          <p className={`status ${isOnline ? "online" : ""}`}>{isOnline ? "Online" : "Offline"}</p>
         </div>
-    </>
+      </header>
+
+      <div className="message-container" ref={messageContainerRef} onScroll={handleScroll}>
+        {loadingOlderMessages && (
+          <div className="older-messages-loading">
+            <Loader2 className="animate-spin w-4 h-4 mr-2" />
+            <span>Loading older messages...</span>
+          </div>
+        )}
+
+        {messages.map((msg) => (
+          <Message key={msg.id} message={msg} authUser={authUser} selectedChat={selectedChat} />
+        ))}
+      </div>
+
+      {sendError && <div className="send-error-banner">{sendError}</div>}
+
+      <footer className="chat-footer">
+        <form onSubmit={handleSendMessage} className="message-input-form">
+          <input
+            type="text"
+            placeholder="Type a message..."
+            value={currentMessage}
+            onChange={(e) => setCurrentMessage(e.target.value)}
+          />
+          <button type="submit" className="send-btn" disabled={!currentMessage.trim() || !isConnected}>
+            <Send className="w-5 h-5" />
+          </button>
+        </form>
+      </footer>
+    </div>
+  );
 }

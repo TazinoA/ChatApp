@@ -1,38 +1,23 @@
-export default function Message(props) {
-  const { content, timestamp, isSent, profilePicUrl } = props;
+import { formatDate } from "../utils/chatHelpers";
+
+export default function Message({ message, authUser, selectedChat }) {
+  const defaultAvatar = "/avatar.png";
+  const isSent = message.senderid === authUser?.id;
+
+  const profilePicUrl = isSent
+    ? authUser?.profile_pic || defaultAvatar
+    : selectedChat?.profile_pic || defaultAvatar;
+
+  const formattedTimestamp = formatDate(message.timestamp);
+
   return (
-    <div className={`text-container ${isSent ? 'sent' : 'received'}`}>
-      <img className="profile-pic" src={profilePicUrl} alt="Profile" />
+    <div className={`text-container ${isSent ? "sent" : "received"}`}>
+      {!isSent && <img className="profile-pic" src={profilePicUrl} alt="Sender Profile" />}
       <div className="message-bubble">
-        <p className="content">{content}</p>
-        <p className="timestamp">{timestamp}</p>
+        <p className="content">{message.content}</p>
+        <span className="timestamp">{formattedTimestamp}</span>
       </div>
+      {isSent && <img className="profile-pic" src={profilePicUrl} alt="Your Profile" />}
     </div>
   );
-}
-
-export function createMessage(message, authUser, selectedChat){
-  const defaultAvatar = "./avatar.png";
-  const isSent = message.senderid === authUser.id
-
-    const profilePicUrl = isSent ? authUser?.profile_pic || defaultAvatar : selectedChat.profile_pic|| defaultAvatar;
-    const timestamp = formatDate(message.timestamp)
-
-    return <Message
-            key = {message.id}
-            id = {message.id}
-            content = {message.content}
-            timestamp = {timestamp} 
-            profilePicUrl = {profilePicUrl}
-            isSent = {isSent}
-         />
-}
-
-function formatDate(inputDate){
-  const date = new Date(inputDate);
-  return date.toLocaleTimeString([], {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
-  });
 }

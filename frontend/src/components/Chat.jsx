@@ -15,7 +15,7 @@ export default function Chat() {
   const messageContainerRef = useRef(null);
   const isNearBottomRef = useRef(true);
 
-  const { authUser, selectedChat, setSelectedChat, socket, isConnected, onlineUserIds } =
+  const { authUser, selectedChat, setSelectedChat, socket, onlineUserIds } =
     useContext(AuthContext);
 
   const contactId = selectedChat?.contactId;
@@ -39,7 +39,6 @@ export default function Chat() {
         setNextCursor(page.nextCursor || null);
         setHasMoreMessages(!!page.hasMore);
 
-        // On initial load, scroll to bottom
         requestAnimationFrame(() => {
           if (messageContainerRef.current) {
             messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
@@ -93,14 +92,12 @@ export default function Chat() {
 
       if (isFromCurrentChat) {
         setMessages((prevMessages) => {
-          // Avoid duplicate messages
           if (prevMessages.some((m) => m.id === message.id)) {
             return prevMessages;
           }
           return [...prevMessages, message];
         });
 
-        // Auto scroll if user is near bottom or is the sender
         const isSentByMe = message.senderid === authUser?.id;
         if (isSentByMe || isNearBottomRef.current) {
           requestAnimationFrame(() => {
@@ -136,23 +133,30 @@ export default function Chat() {
   };
 
   const handleSendMessage = (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setSendError("");
 
-    if (!isConnected) {
-      setSendError("Connecting to server...");
-      return;
-    }
+    const trimmed = currentMessage.trim();
+    if (!trimmed) return;
 
-    if (!currentMessage.trim()) return;
+    if (socket && !socket.connected) {
+      socket.connect();
+    }
 
     const messageToSend = {
       receiverid: contactId,
-      content: currentMessage.trim(),
+      content: trimmed,
     };
 
     socket.emit("send-message", messageToSend);
     setCurrentMessage("");
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage(e);
+    }
   };
 
   const handleBack = () => {
@@ -206,8 +210,9 @@ export default function Chat() {
             placeholder="Type a message..."
             value={currentMessage}
             onChange={(e) => setCurrentMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
           />
-          <button type="submit" className="send-btn" disabled={!currentMessage.trim() || !isConnected}>
+          <button type="submit" className="send-btn" disabled={!currentMessage.trim()}>
             <Send className="w-5 h-5" />
           </button>
         </form>

@@ -99,6 +99,18 @@
   transform: scale(1.05);
 }
 
+/* Hide default file input completely */
+input[type="file"].hidden,
+input.hidden {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  position: absolute !important;
+  pointer-events: none !important;
+}
+
 .img-upload-hint {
   font-size: 0.75rem;
   color: var(--text-muted);
@@ -180,21 +192,4 @@
 .meta-val {
   color: var(--text-main);
   font-weight: 500;
-}
-
-.status-badge {
-  padding: 0.25rem 0.625rem;
-  border-radius: 1rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
-
-.status-badge.connected {
-  background-color: rgba(16, 185, 129, 0.15);
-  color: #10b981;
-}
-
-.status-badge.disconnected {
-  background-color: rgba(239, 68, 68, 0.15);
-  color: #ef4444;
 }

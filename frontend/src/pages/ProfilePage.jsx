@@ -1,12 +1,12 @@
 import NavBar from "../components/NavBar.jsx";
 import "../styles/profile.css";
-import { Camera, Loader2, User, Mail, Calendar, ShieldCheck } from "lucide-react";
+import { Camera, Loader2, User, Mail, Calendar } from "lucide-react";
 import { useState, useContext } from "react";
 import AuthContext from "../utils/AuthContext.js";
 import { updateProfilePic } from "../utils/api.js";
 
 export default function ProfilePage() {
-  const { authUser, setAuthUser, isConnected } = useContext(AuthContext);
+  const { authUser, setAuthUser } = useContext(AuthContext);
   const [isUpdatingProfile, setIsUpdatingProfile] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
@@ -18,14 +18,12 @@ export default function ProfilePage() {
     setErrorMessage("");
     setSuccessMessage("");
 
-    // 1. Client-side validation: MIME type
     const validTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
     if (!validTypes.includes(file.type)) {
       setErrorMessage("Please select a valid image file (JPEG, PNG, WEBP, GIF).");
       return;
     }
 
-    // 2. Client-side validation: Size limit (<= 2MB)
     if (file.size > 2 * 1024 * 1024) {
       setErrorMessage("Image file size must be less than 2MB.");
       return;
@@ -141,14 +139,6 @@ export default function ProfilePage() {
                   <Calendar className="meta-icon" /> Member Since:
                 </span>
                 <span className="meta-val">{formattedDate}</span>
-              </div>
-              <div className="meta-row">
-                <span>
-                  <ShieldCheck className="meta-icon" /> Socket Connection:
-                </span>
-                <span className={`status-badge ${isConnected ? "connected" : "disconnected"}`}>
-                  {isConnected ? "Connected" : "Disconnected"}
-                </span>
               </div>
             </div>
           </div>

@@ -87,18 +87,22 @@ export default function Chat() {
     if (!socket || !contactId) return;
 
     function onReceiveMessage(message) {
+      const msgSenderId = Number(message.senderid);
+      const msgReceiverId = Number(message.receiverid);
+      const activeContactId = Number(contactId);
+
       const isFromCurrentChat =
-        message.senderid === contactId || message.receiverid === contactId;
+        msgSenderId === activeContactId || msgReceiverId === activeContactId;
 
       if (isFromCurrentChat) {
         setMessages((prevMessages) => {
-          if (prevMessages.some((m) => m.id === message.id)) {
+          if (prevMessages.some((m) => Number(m.id) === Number(message.id))) {
             return prevMessages;
           }
           return [...prevMessages, message];
         });
 
-        const isSentByMe = message.senderid === authUser?.id;
+        const isSentByMe = Number(message.senderid) === Number(authUser?.id);
         if (isSentByMe || isNearBottomRef.current) {
           requestAnimationFrame(() => {
             if (messageContainerRef.current) {

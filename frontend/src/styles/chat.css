@@ -101,6 +101,11 @@
   background-color: var(--bg-hover);
 }
 
+.contact-card-btn.selected {
+  background-color: var(--bg-hover);
+  border-left: 3px solid var(--primary);
+}
+
 .avatar-wrapper {
   position: relative;
   flex-shrink: 0;
@@ -158,6 +163,8 @@
 .contact-bottom {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
 
 .last-msg-text {
@@ -166,6 +173,26 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex: 1;
+}
+
+.unread-text {
+  font-weight: 700 !important;
+  color: var(--text-main) !important;
+}
+
+.unread-time {
+  font-weight: 600;
+  color: var(--online-status);
+}
+
+.unread-dot {
+  width: 0.625rem;
+  height: 0.625rem;
+  background-color: var(--online-status);
+  border-radius: 50%;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
 }
 
 .sidebar-state-container {

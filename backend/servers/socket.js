@@ -107,6 +107,9 @@ io.on("connection", (socket) => {
         }
       }
 
+      // Emit directly to current socket if not in map for any reason
+      socket.emit("receive-message", savedMessage);
+
       // Broadcast saved message to sender sockets (for sync across multiple tabs/devices)
       const senderSockets = userSocketMap.get(senderid);
       if (senderSockets) {

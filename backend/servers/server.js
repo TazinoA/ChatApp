@@ -19,6 +19,7 @@ const clientUrl = process.env.CLIENT_URL || "http://localhost:3000";
 app.use(
   helmet({
     contentSecurityPolicy: false,
+    crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" },
   })
 );
 

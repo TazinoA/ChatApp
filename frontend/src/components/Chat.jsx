@@ -18,11 +18,13 @@ export default function Chat() {
   const { authUser, selectedChat, setSelectedChat, socket, onlineUserIds } =
     useContext(AuthContext);
 
-  const contactId = selectedChat?.contactId;
+  const contactId = selectedChat?.contactId ?? selectedChat?.id;
+  const numericContactId = contactId ? Number(contactId) : null;
+
   const isOnline = Array.isArray(onlineUserIds)
-    ? onlineUserIds.includes(contactId)
+    ? onlineUserIds.map(Number).includes(numericContactId)
     : onlineUserIds instanceof Set
-    ? onlineUserIds.has(contactId)
+    ? onlineUserIds.has(numericContactId)
     : false;
 
   useEffect(() => {
@@ -148,7 +150,7 @@ export default function Chat() {
     }
 
     const messageToSend = {
-      receiverid: contactId,
+      receiverid: numericContactId,
       content: trimmed,
     };
 

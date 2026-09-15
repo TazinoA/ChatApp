@@ -21,8 +21,11 @@ function App() {
       const stored = localStorage.getItem("selectedChat");
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (parsed && !parsed.placeholder && parsed.contactId) {
-          return parsed;
+        if (parsed && !parsed.placeholder && (parsed.contactId || parsed.id)) {
+          return {
+            ...parsed,
+            contactId: parsed.contactId ?? parsed.id,
+          };
         }
       }
     } catch (e) {
